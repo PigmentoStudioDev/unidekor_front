@@ -1,0 +1,65 @@
+/* Strip de productos: intro 40% (claro) + lista de service cards 60% sobre
+   superficie highlight (#93897e). min-height de sección 60vh. Edge-to-edge. */
+
+.aa-landing .aa-products__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  min-height: 60vh;
+}
+
+/* Columna izquierda (40%): intro claro. La base 40% no crece (suma 100% con la lista). */
+.aa-landing .aa-products__intro {
+  flex: 1 1 40%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-m);
+  padding: var(--aa-section-pad) var(--aa-gutter);
+}
+
+/* Botones apilados, alineados a la izquierda, tamaño según su contenido.
+   Sin margin-top propio: el espacio hacia la subheading ya lo da el gap del
+   flex padre (.aa-products__intro) — duplicarlo aquí rompía el ritmo vertical. */
+.aa-landing .aa-products__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--aa-gap-xs);
+}
+
+/* Columna derecha (60%): superficie highlight; remapea tokens a claro-sobre-superficie
+   (texto claro, stroke claro, botón claro con texto oscuro). */
+.aa-landing .aa-products__list {
+  flex: 1 1 60%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--aa-surface-highlight);
+  --aa-fg: var(--aa-ink-light);
+  --aa-fg-muted: rgba(252, 251, 250, 0.82);
+  --aa-border: rgba(252, 251, 250, 0.5);
+  --aa-accent: var(--aa-surface-light);
+  --aa-accent-fg: var(--aa-ink-dark);
+  color: var(--aa-fg);
+}
+
+/* Service card: reparte el alto de la lista, contenido centrado, stroke inferior. */
+.aa-landing .aa-service-card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--aa-gap-xs);
+  padding: var(--aa-gap-l) var(--aa-gutter);
+  border-bottom: 1px solid var(--aa-border);
+}
+
+/* Colapso a una columna en el mismo breakpoint que el hero (991px). */
+@media screen and (max-width: 991px) {
+  .aa-landing .aa-products__intro,
+  .aa-landing .aa-products__list {
+    flex-basis: 100%;
+  }
+}

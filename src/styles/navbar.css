@@ -1,0 +1,222 @@
+/* Navbar global. Logo izquierda + navlinks a la derecha (sin CTA). Barra sólida fija sobre
+   el fondo del root; color de marca vía tokens semánticos (fg/bg) para seguir el tema. */
+
+.aa-landing .aa-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--aa-gap-l);
+  width: 100%;
+  padding: 1.5rem 3vw;
+  /* Transparente en el top (y=0): el fondo sólido lo pinta ::before, que hace fade al
+     scrollear (is--scrolled). Así la barra flota sobre el hero al inicio. */
+  transition: transform var(--aa-duration-s) var(--aa-ease);
+}
+
+/* Capa de fondo sólido + borde, oculta en el top y visible al scrollear. background-image
+   (no -color) porque el overdraw del section-theme fuerza background-color:transparent. */
+.aa-landing .aa-nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: linear-gradient(var(--aa-bg), var(--aa-bg));
+  border-bottom: 1px solid var(--aa-border);
+  opacity: 0;
+  transition: opacity var(--aa-duration-s) var(--aa-ease);
+}
+
+.aa-landing .aa-nav.is--scrolled::before {
+  opacity: 1;
+}
+
+/* Viñeta global en top0: oscurece la franja superior para que el contenido blanco del
+   navbar se lea sobre páginas claras o hero. Se extiende bajo la barra (height > alto del
+   navbar) para el degradado y se desvanece al scrollear (ya hay barra sólida). */
+.aa-landing .aa-nav::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 160px;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0));
+  opacity: 1;
+  transition: opacity var(--aa-duration-s) var(--aa-ease);
+  pointer-events: none;
+}
+
+.aa-landing .aa-nav.is--scrolled::after {
+  opacity: 0;
+}
+
+/* Auto-hide + estado inicial de entrada: oculto arriba (initNavbar togglea la clase). */
+.aa-landing .aa-nav.is--hidden {
+  transform: translateY(-100%);
+}
+
+/* Reduced-motion: la barra aparece/oculta sin deslizamiento. */
+@media (prefers-reduced-motion: reduce) {
+  .aa-landing .aa-nav {
+    transition: none;
+  }
+}
+
+.aa-landing .aa-nav__logo {
+  display: block;
+  flex: none;
+}
+
+.aa-landing .aa-nav__logo-img {
+  display: block;
+  width: auto;
+  height: clamp(1.5rem, 2.6vw, 2.25rem);
+  /* Logo light (blanco): sin filtro en top0 (se lee blanco sobre el hero). Al scrollear la
+     barra se vuelve clara → se oscurece el logo (brightness(0)) para que contraste. */
+  filter: none;
+  transition: filter var(--aa-duration-s) var(--aa-ease);
+}
+
+.aa-landing .aa-nav.is--scrolled .aa-nav__logo-img {
+  filter: brightness(0);
+}
+
+/* margin-left:auto ancla los links a la derecha aunque cambie el ancho del logo. */
+.aa-landing .aa-nav__links {
+  display: flex;
+  align-items: center;
+  gap: var(--aa-gap-l);
+  margin-left: auto;
+}
+
+.aa-landing .aa-nav__link {
+  /* Blanco en top0 (sobre el hero); al scrollear (is--scrolled) vuelve al fg. */
+  color: #ffffff;
+  font-family: var(--aa-font);
+  font-size: var(--aa-text-xs);
+  font-weight: var(--aa-weight-semibold);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--aa-duration-s) var(--aa-ease);
+}
+
+.aa-landing .aa-nav.is--scrolled .aa-nav__link {
+  color: var(--aa-fg);
+}
+
+/* Subrayado animado (Osmo "Underline Link"): crece desde la izquierda en hover y se retrae
+   hacia la derecha al salir. currentColor = fg del link. 100% CSS. */
+.aa-landing [data-underline-link] {
+  position: relative;
+}
+
+.aa-landing [data-underline-link]::before {
+  content: '';
+  position: absolute;
+  bottom: -0.4em;
+  left: 0;
+  width: 100%;
+  height: 0.0625em;
+  background-color: currentColor;
+  transform: scaleX(0) rotate(0.001deg);
+  transform-origin: right;
+  transition: transform 0.735s var(--aa-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .aa-landing [data-underline-link]:hover::before {
+    transform-origin: left;
+    transform: scaleX(1) rotate(0.001deg);
+  }
+}
+
+/* ─── Burger (visible solo <992px, lo togglea initNavMobile) ───────────────────── */
+.aa-landing .aa-nav__burger {
+  display: none; /* desktop: nunca */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2em;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 1rem; /* fija el em de gap/shift para el colapso a X */
+}
+
+.aa-landing .aa-nav__burger-line {
+  display: block;
+  width: 1.25em;
+  height: 0.125em;
+  /* Blanco en top0; fg al scrollear. */
+  background-color: #ffffff;
+  border-radius: 1px;
+  will-change: transform;
+  transition: background-color var(--aa-duration-s) var(--aa-ease);
+}
+
+.aa-landing .aa-nav.is--scrolled .aa-nav__burger-line {
+  background-color: var(--aa-fg);
+}
+
+/* ─── Overlay mobile ───────────────────────────────────────────────────────────── */
+.aa-landing .aa-nav__mobile {
+  display: none; /* desktop: nunca */
+}
+
+.aa-landing .aa-nav__mobile-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--aa-gap-m);
+}
+
+.aa-landing .aa-nav__mobile-link {
+  color: var(--aa-fg);
+  font-family: var(--aa-font);
+  font-size: var(--aa-text-l);
+  font-weight: var(--aa-weight-semibold);
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+/* Mobile (<992px): sin navlinks; aparece burger + overlay. */
+@media screen and (max-width: 991px) {
+  .aa-landing .aa-nav__links {
+    display: none;
+  }
+  .aa-landing .aa-nav__burger {
+    display: inline-flex;
+  }
+  .aa-landing .aa-nav__mobile {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 4.5rem; /* fallback; initNavMobile lo ajusta al alto real de la barra */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 85; /* bajo la barra (z 90); arranca debajo, no la tapa */
+    padding: 2rem 3vw 3rem;
+    /* Fondo opaco: mismo truco que la barra (el overdraw pinta transparent). */
+    background-image: linear-gradient(var(--aa-bg), var(--aa-bg));
+    overflow-y: auto;
+    /* Estado cerrado; initNavMobile (autoAlpha GSAP) controla la apertura. */
+    visibility: hidden;
+    opacity: 0;
+  }
+}

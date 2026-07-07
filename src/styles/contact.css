@@ -1,0 +1,101 @@
+/* Contacto + mapa (port Relume Contact 14): intro full-width arriba, luego grid
+   .5fr/1fr — 3 bloques de contacto (izq) + mapa (der, ocupa todo el alto). */
+
+/* Dark theme de la strip sobre la superficie highlight ya usada en Products/Quote
+   (mismo token de marca, no un color nuevo). El resto de tokens dark (fg claro,
+   accent, bordes) del sistema ya funcionan bien sobre este tono. */
+.aa-landing .aa-contact {
+  --aa-bg: var(--aa-surface-highlight);
+}
+
+.aa-landing .aa-contact__inner {
+  max-width: var(--aa-container-max);
+  margin-inline: auto;
+  padding: var(--aa-section-pad) var(--aa-gutter);
+}
+
+.aa-landing .aa-contact__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--aa-gap-s);
+  max-width: 32em;
+  margin-bottom: var(--aa-gap-xl);
+}
+
+.aa-landing .aa-contact__grid {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr;
+  gap: var(--aa-gap-xl);
+  align-items: stretch;
+}
+
+/* Columna izquierda: 3 bloques de contacto apilados. */
+.aa-landing .aa-contact__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-l);
+}
+
+.aa-landing .aa-contact-item__icon {
+  width: 2em;
+  height: 2em;
+  margin-bottom: var(--aa-gap-xs);
+  color: var(--aa-accent);
+}
+.aa-landing .aa-contact-item__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.aa-landing .aa-contact-item .aa-h-m {
+  font-size: var(--aa-text-m);
+  margin-bottom: var(--aa-gap-xxs);
+}
+.aa-landing .aa-contact-item .aa-p-m {
+  margin-bottom: var(--aa-gap-xs);
+}
+
+.aa-landing .aa-contact-item__link {
+  color: var(--aa-fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Columna derecha: mapa embebido de Google Maps, con caption flotante que abre
+   la ubicación en una pestaña nueva. */
+.aa-landing .aa-contact__map {
+  position: relative;
+  min-height: 320px;
+  border-radius: var(--aa-radius-l);
+  overflow: hidden;
+  border: 1px solid var(--aa-border);
+}
+.aa-landing .aa-contact__map-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  border: 0;
+}
+.aa-landing .aa-contact__map-caption {
+  position: absolute;
+  left: var(--aa-gap-s);
+  bottom: var(--aa-gap-s);
+  padding: 0.6em 1.1em;
+  font-family: var(--aa-font);
+  font-size: var(--aa-text-xs);
+  font-weight: var(--aa-weight-semibold);
+  color: var(--aa-ink-dark);
+  background: var(--aa-surface-light);
+  border-radius: var(--aa-radius-pill);
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Colapso a 1 columna (mismo breakpoint que el resto del sitio). */
+@media screen and (max-width: 991px) {
+  .aa-landing .aa-contact__grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,132 @@
+/* Strip de cotización (port de estructura Relume Contact 7): UNA imagen de fondo
+   cubre la strip completa. Encima, grid parejo (1fr/1fr) de dos bloques con el
+   MISMO peso visual: panel sólido (form) + imagen de producto llenando su columna.
+   El panel resuelve la legibilidad (antes el form flotaba transparente sobre la
+   foto); ambos bloques comparten radius para leerse como un par coherente. */
+
+.aa-landing .aa-quote {
+  position: relative;
+  overflow: clip; /* recorta la capa de fondo rotada/escalada */
+}
+
+/* Fondo de la strip: <img> rotada 90° a la derecha. scale compensa el rotate para que la
+   imagen siga cubriendo la caja (el rotate deja huecos en los costados). z-index 0 → bajo
+   el contenido. */
+.aa-landing .aa-quote__bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%) rotate(90deg) scale(2.2);
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* El fondo (.aa-quote) va full-bleed, pero el contenido respeta el max-width general
+   y se centra, igual que FAQ/Contacto/resto de secciones porteadas. */
+.aa-landing .aa-quote__inner {
+  position: relative;
+  z-index: 1; /* sobre la capa de fondo (.aa-quote__bg) */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  gap: var(--aa-gap-l);
+  min-height: 80vh;
+  max-width: var(--aa-container-max);
+  margin-inline: auto;
+  padding: var(--aa-section-pad) var(--aa-gutter);
+}
+
+/* Panel: contenedor del form. Overlay ligeramente oscuro para que el texto claro pase
+   contraste (WCAG) sobre la foto de fondo. */
+.aa-landing .aa-quote__panel {
+  display: flex;
+  align-items: center;
+  border-radius: var(--aa-radius-xl);
+  padding: var(--aa-gap-xl) var(--aa-gap-l);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.aa-landing .aa-quote__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-m);
+}
+
+/* Cinco campos, cada uno con su label (antes solo placeholder). */
+.aa-landing .aa-quote__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-s);
+}
+.aa-landing .aa-quote__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-xxs);
+}
+.aa-landing .aa-input {
+  width: 100%;
+  padding: 0.9em 1em;
+  font-family: var(--aa-font);
+  font-size: var(--aa-text-s);
+  color: var(--aa-ink-dark);
+  background: var(--aa-clay-100);
+  border: none;
+  border-radius: var(--aa-radius-s);
+}
+.aa-landing .aa-input::placeholder {
+  color: rgba(57, 41, 33, 0.5); /* ink al 50%: se lee como placeholder sobre el clay */
+}
+.aa-landing .aa-input:focus-visible {
+  outline: 2px solid var(--aa-surface-light);
+  outline-offset: 2px;
+}
+/* Select (Tipo de proyecto): quita el estilo nativo y pinta un chevron propio para que
+   iguale a los inputs. Mantiene el fondo clay heredado de .aa-input. */
+.aa-landing .aa-input--select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 2.5em;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23392921' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1em center;
+  background-size: 0.75em;
+}
+
+.aa-landing .aa-input--area {
+  resize: vertical;
+  min-height: 6em;
+}
+
+/* ENVIAR alineado a la izquierda, tamaño según su contenido. */
+.aa-landing .aa-quote__form .aa-btn {
+  align-self: flex-start;
+}
+
+/* Columna derecha: imagen de producto en formato 1:1. align-self:center evita que el
+   stretch del grid la deforme cuando el panel es más alto. */
+.aa-landing .aa-quote__media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  align-self: center;
+  border-radius: var(--aa-radius-xl);
+  background-color: var(--aa-neutral-300);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* En wrap colapsa la columna de imagen; el panel pasa a ancho completo. */
+@media screen and (max-width: 991px) {
+  .aa-landing .aa-quote__inner {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .aa-landing .aa-quote__media {
+    display: none;
+  }
+}

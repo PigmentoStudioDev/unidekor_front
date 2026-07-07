@@ -1,0 +1,178 @@
+/* Reglas de la página "¿Quiénes somos?" (nosotros). Partial importado por landing.css
+   (los tokens/fuentes/navbar/footer + el bloque root ya viven en landing.css). */
+
+/* ─── Header: bg cover + título abajo-izquierda ────────────────────────────────── */
+.aa-landing .aa-quienes-hero {
+  position: relative;
+  height: 40vh;
+  min-height: 8rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.aa-landing .aa-quienes-hero__inner {
+  height: 100%;
+  max-width: var(--aa-container-max);
+  margin-inline: auto;
+  padding-inline: var(--aa-gutter);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding-bottom: var(--aa-gap-m);
+}
+
+.aa-landing .aa-quienes-hero__title {
+  font-family: var(--aa-font-display);
+  font-weight: var(--aa-weight-bold);
+  font-size: var(--aa-text-xl);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--aa-fg);
+}
+
+/* ─── Intro: col vacía 30% + col 70% (lead + subfila imagen/historia) ──────────── */
+.aa-landing .aa-quienes-intro__inner {
+  max-width: var(--aa-container-max);
+  margin-inline: auto;
+  padding: var(--aa-section-pad) var(--aa-gutter);
+}
+
+.aa-landing .aa-quienes-intro__row {
+  display: flex;
+  gap: var(--aa-gap-l);
+}
+
+.aa-landing .aa-quienes-intro__col-empty {
+  flex: 0 0 30%;
+}
+
+.aa-landing .aa-quienes-intro__col-main {
+  flex: 1 1 70%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-xl);
+}
+
+.aa-landing .aa-quienes-intro__lead {
+  font-family: var(--aa-font);
+  font-weight: var(--aa-weight-semibold);
+  font-size: var(--aa-text-ml);
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: var(--aa-fg);
+}
+
+.aa-landing .aa-quienes-intro__subrow {
+  display: flex;
+  gap: var(--aa-gap-l);
+  align-items: stretch;
+}
+
+/* Imagen del piso: ocupa el alto completo del texto (sin aspect-ratio); object-fit cover. */
+.aa-landing .aa-quienes-intro__media {
+  flex: 0 0 40%;
+  overflow: clip;
+  border-radius: var(--aa-radius-l);
+}
+
+.aa-landing .aa-quienes-intro__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.aa-landing .aa-quienes-intro__historia {
+  flex: 1 1 60%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-m);
+}
+
+.aa-landing .aa-quienes-intro__para {
+  font-family: var(--aa-font);
+  font-weight: var(--aa-weight-bold);
+  font-size: var(--aa-text-s);
+  line-height: 1.5;
+  color: var(--aa-fg);
+}
+
+/* ─── Espacios: heading izq + grid de 4 imágenes ───────────────────────────────── */
+.aa-landing .aa-espacios__inner {
+  max-width: var(--aa-container-max);
+  margin-inline: auto;
+  padding: var(--aa-section-pad) var(--aa-gutter);
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-l);
+}
+
+.aa-landing .aa-espacios__title {
+  font-family: var(--aa-font-display);
+  font-weight: var(--aa-weight-bold);
+  font-size: var(--aa-text-xl);
+  line-height: 1;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--aa-fg);
+}
+
+/* Base (touch / wrap): cuadros 1:1. */
+.aa-landing .aa-espacios__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--aa-gap-s);
+}
+
+.aa-landing .aa-espacios__item {
+  aspect-ratio: 1 / 1;
+  overflow: clip;
+  border-radius: var(--aa-radius-l);
+}
+
+.aa-landing .aa-espacios__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Desktop con hover: paneles horizontales que se expanden/contraen. */
+@media (hover: hover) and (min-width: 768px) {
+  .aa-landing .aa-espacios__grid {
+    display: flex;
+    gap: var(--aa-gap-s);
+    height: 60vh;
+  }
+  .aa-landing .aa-espacios__item {
+    flex: 1;
+    aspect-ratio: auto;
+    height: 100%;
+    transition: flex var(--aa-duration-m) var(--aa-ease);
+  }
+  .aa-landing .aa-espacios__item:hover {
+    flex: 3;
+  }
+}
+
+/* Mobile: apila la intro. */
+@media screen and (max-width: 767px) {
+  .aa-landing .aa-quienes-intro__row {
+    flex-direction: column;
+  }
+  .aa-landing .aa-quienes-intro__col-empty {
+    display: none;
+  }
+  .aa-landing .aa-quienes-intro__subrow {
+    flex-direction: column;
+  }
+  .aa-landing .aa-quienes-intro__media {
+    flex-basis: auto;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+  }
+}

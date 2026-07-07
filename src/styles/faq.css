@@ -1,0 +1,85 @@
+/* FAQ (port Relume FAQ 3): grid .75fr/1fr — intro (izq) + acordeón (der). */
+
+.aa-landing .aa-faq__inner {
+  display: grid;
+  grid-template-columns: 0.75fr 1fr;
+  gap: var(--aa-gap-xl);
+  padding: var(--aa-section-pad) var(--aa-gutter);
+  max-width: var(--aa-container-max);
+  margin-inline: auto;
+}
+
+.aa-landing .aa-faq__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--aa-gap-m);
+}
+
+.aa-landing .aa-faq__accordion {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Item: trigger (fila clicable) + content (colapsable). Divisor entre preguntas. */
+.aa-landing .aa-faq-item {
+  border-bottom: 1px solid var(--aa-border);
+}
+.aa-landing .aa-faq-item__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--aa-gap-m);
+  padding-block: var(--aa-gap-s);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--aa-fg);
+}
+.aa-landing .aa-faq-item__trigger .aa-h-m {
+  font-size: var(--aa-text-s);
+}
+
+.aa-landing .aa-faq-item__icon {
+  flex-shrink: 0;
+  font-size: var(--aa-text-m);
+  line-height: 1;
+  transition: transform var(--aa-duration-s) var(--aa-ease);
+}
+.aa-landing .aa-faq-item[data-aa-open="true"] .aa-faq-item__icon {
+  transform: rotate(45deg);
+}
+
+/* Collapse animado sin JS de medición: 0fr↔1fr en la fila del grid (patrón OSMO).
+   overflow:hidden en el propio grid container es obligatorio: sin él, algunos
+   navegadores respetan el min-content del hijo y el "cierre" queda a medias
+   (se ve una línea de texto cortada en vez de 0 de alto). El wrap con
+   height:100000% fuerza el colapso real: al ser %, su alto sigue al del row
+   track (≈0 cuando el grid está en 0fr), en vez de quedarse en su alto natural. */
+.aa-landing .aa-faq-item__content {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows var(--aa-duration-m) var(--aa-ease);
+}
+.aa-landing .aa-faq-item[data-aa-open="true"] .aa-faq-item__content {
+  grid-template-rows: 1fr;
+}
+.aa-landing .aa-faq-item__content-wrap {
+  height: 100000%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.aa-landing .aa-faq-item__content-inner {
+  padding-bottom: var(--aa-gap-s);
+}
+
+/* En wrap colapsa a una sola columna (mismo breakpoint que el resto de strips). */
+@media screen and (max-width: 991px) {
+  .aa-landing .aa-faq__inner {
+    grid-template-columns: 1fr;
+  }
+}

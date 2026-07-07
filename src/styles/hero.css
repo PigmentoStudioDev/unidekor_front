@@ -1,0 +1,99 @@
+/* Hero de 3 columnas. Los asides crecen para llenar el sobrante; la central está
+   capada a 800px (por eso en pantallas muy grandes solo los asides se extienden).
+   En mobile los asides se ocultan y queda solo la central. */
+
+/* Ancho completo (sin cap de container) para que los asides puedan extenderse.
+   Sin gap ni padding lateral: columnas pegadas de borde a borde. */
+.aa-landing .aa-hero__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  min-height: 100vh;
+}
+
+/* Columnas de los costados: flex-grow reparte el espacio sobrante entre ellas.
+   Llenan su track completo (width/height 100%), sin radius (edge-to-edge). */
+.aa-landing .aa-hero__aside {
+  flex: 1 1 0;
+  min-width: 0;
+  /* Altura real = alto de la fila (min-height del inner + columna central), vía stretch.
+     height:100% no sirve: el inner no tiene altura definida y colapsaría a 0 en vacío. */
+  align-self: stretch;
+  background-color: var(--aa-bg-subtle);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Columna central: base 800, no crece más (max-width la fija). Partida en dos
+   mitades (top/split) que llenan el alto; sin margin/padding superior. */
+.aa-landing .aa-hero__main {
+  flex: 0 1 var(--aa-content-max);
+  width: 100%;
+  max-width: var(--aa-content-max);
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* Mitad superior: crece para tomar la mayor parte del alto (mucho más que el split).
+   Heading + ctas abajo-izquierda, con padding lateral y vertical. */
+.aa-landing .aa-hero__top {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: var(--aa-gap-m);
+  padding-block: var(--aa-section-pad);
+  padding-inline: var(--aa-gutter);
+}
+
+/* El heading respeta el salto de línea (\n) del copy. */
+.aa-landing .aa-hero__heading {
+  white-space: pre-line;
+}
+
+/* Row de CTAs bajo el heading. */
+.aa-landing .aa-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--aa-gap-s);
+}
+
+/* Mitad inferior: franja CORTA. Como sus bloques solo llevarán bg image (sin
+   contenido semántico que dé altura), su alto se fija con min-height PORCENTUAL —
+   30% del main, que tiene alto definido (stretch del inner a 100vh). Dos containers
+   al 50% en row, sin gap. */
+.aa-landing .aa-hero__split {
+  flex: 0 0 auto;
+  min-height: 30%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+.aa-landing .aa-hero__split > * {
+  flex: 1 1 50%;
+  min-width: 0;
+}
+
+/* Columnas de la fila 50/50: height 100% forzoso (igualan alto del row). */
+.aa-landing .aa-hero__block {
+  width: 100%;
+  height: 100%;
+  min-height: 140px;
+  align-self: stretch;
+  background-color: var(--aa-bg-subtle);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid var(--aa-border);
+}
+
+/* Hacia mobile: se ocultan las columnas de los extremos. */
+@media screen and (max-width: 991px) {
+  .aa-landing .aa-hero__aside { display: none; }
+}

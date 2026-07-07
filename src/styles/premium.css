@@ -1,0 +1,59 @@
+/* Página premium · mismo sistema de marca (tokens/fuentes/paleta compartidos con
+   landing.css), composición de secciones distinta (100% port de layouts Relume). */
+
+@import "./fonts.css";
+@import "./tokens.css";
+@import "./typography.css";
+@import "./layout.css";
+@import "./components.css";
+@import "./section-theme.css";
+
+/* Secciones reusadas del sitio original (mismas clases .aa-*). */
+@import "./quote.css";
+@import "./faq.css";
+@import "./contact.css";
+@import "./footer.css";
+
+/* Secciones nuevas de la página premium. */
+@import "./premium/navbar.css";
+@import "./premium/hero.css";
+@import "./premium/trust.css";
+@import "./premium/products.css";
+@import "./premium/about.css";
+
+/* Reset box-sizing: sin esto, width:100% + padding desbordan los contenedores. */
+.aa-landing *,
+.aa-landing *::before,
+.aa-landing *::after {
+  box-sizing: border-box;
+}
+
+.aa-landing {
+  font-family: var(--aa-font);
+  font-size: var(--aa-size-font);
+  color: var(--aa-fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+  isolation: isolate;
+}
+.aa-landing::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--aa-bg);
+  pointer-events: none;
+}
+.aa-landing :where(h1, h2, h3, h4, h5, h6, p) {
+  margin: 0;
+}
+
+.aa-landing .aa-text-center  { text-align: center; }
+.aa-landing .aa-text-balance { text-wrap: balance; }
+.aa-landing .aa-text-accent  { color: var(--aa-accent); }
+.aa-landing .aa-flex-col     { display: flex; flex-direction: column; }
+.aa-landing .aa-flex-center  { display: flex; align-items: center; justify-content: center; }
+.aa-landing .aa-gap-s        { gap: var(--aa-gap-s); }
+.aa-landing .aa-gap-m        { gap: var(--aa-gap-m); }
+.aa-landing .aa-gap-l        { gap: var(--aa-gap-l); }

@@ -1,0 +1,128 @@
+/* Reglas de la página de contacto (layout 3 columnas). Partial importado por landing.css;
+   los estilos del form (quote.css), tokens/fuentes/navbar/footer y el bloque root ya viven
+   ahí. La viñeta de top0 es global (vive en el navbar, .aa-nav::after). */
+
+/* ─── Layout 3 columnas full-bleed ─────────────────────────────────────────────── */
+
+/* La grilla ocupa todo el ancho y 100vh de alto. La columna de imagen va a sangre (sin
+   padding); las de contenido llevan su propio padding. */
+.aa-landing .aa-contacto__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  align-items: stretch;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.aa-landing .aa-contacto__col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-m);
+  min-width: 0;
+}
+
+/* Columnas de contenido: padding propio (el top libera el navbar fijo). */
+.aa-landing .aa-contacto__col--form {
+  padding: calc(var(--aa-section-pad) + 4rem) var(--aa-gap-xl) var(--aa-section-pad) var(--aa-gutter);
+}
+.aa-landing .aa-contacto__col--info {
+  padding: calc(var(--aa-section-pad) + 4rem) var(--aa-gap-xl) var(--aa-section-pad) 0;
+}
+
+/* ─── Col 1: form ─────────────────────────────────────────────────────────────── */
+.aa-landing .aa-contacto__heading {
+  font-family: var(--aa-font-display);
+  font-weight: var(--aa-weight-bold);
+  font-size: var(--aa-text-xl);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--aa-fg);
+}
+
+.aa-landing .aa-contacto__intro {
+  font-family: var(--aa-font);
+  font-size: var(--aa-text-s);
+  line-height: 1.5;
+  color: var(--aa-fg-muted);
+}
+
+/* ─── Col 2: canales + dirección + mapa ───────────────────────────────────────── */
+.aa-landing .aa-contacto__channels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-xs);
+}
+
+.aa-landing .aa-contacto__channel {
+  font-family: var(--aa-font);
+  font-size: var(--aa-text-s);
+  font-weight: var(--aa-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--aa-fg);
+}
+
+.aa-landing .aa-contacto__address-label {
+  font-family: var(--aa-font-mono);
+  font-size: var(--aa-text-xxs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--aa-fg-muted);
+}
+
+.aa-landing .aa-contacto__address-text {
+  font-family: var(--aa-font);
+  font-size: var(--aa-text-s);
+  line-height: 1.5;
+  color: var(--aa-fg);
+}
+
+.aa-landing .aa-contacto__map {
+  border-radius: var(--aa-radius-l);
+  overflow: clip;
+}
+
+.aa-landing .aa-contacto__map-frame {
+  display: block;
+  width: 100%;
+  height: 240px;
+  border: 0;
+}
+
+/* ─── Col 3: imagen ───────────────────────────────────────────────────────────── */
+.aa-landing .aa-contacto__col--media {
+  background-color: var(--aa-bg-subtle);
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────────────── */
+/* Al hacer wrap se quita la columna de en medio (info): queda form + imagen. Las redes y
+   el mapa siguen disponibles en el footer. */
+@media screen and (max-width: 991px) {
+  .aa-landing .aa-contacto__inner {
+    grid-template-columns: 1fr 1fr;
+    min-height: auto;
+  }
+  .aa-landing .aa-contacto__col--info {
+    display: none;
+  }
+  .aa-landing .aa-contacto__col--media {
+    min-height: 18rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .aa-landing .aa-contacto__inner {
+    grid-template-columns: 1fr;
+  }
+  .aa-landing .aa-contacto__col--form {
+    padding-inline: var(--aa-gutter);
+  }
+}

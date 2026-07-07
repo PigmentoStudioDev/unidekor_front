@@ -1,0 +1,34 @@
+/* Trust/stats: heading centrado + fila de cifras grandes. */
+
+.aa-landing .aa-trust__inner {
+  max-width: var(--aa-container-max);
+  margin-inline: auto;
+  padding: var(--aa-section-pad) var(--aa-gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--aa-gap-xl);
+  text-align: center;
+}
+
+.aa-landing .aa-trust__inner .aa-h-m {
+  max-width: 32em;
+}
+
+.aa-landing .aa-trust__stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--aa-gap-xxl);
+}
+
+.aa-landing .aa-trust__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--aa-gap-xxs);
+}
+
+.aa-landing .aa-trust__value {
+  color: var(--aa-accent);
+}

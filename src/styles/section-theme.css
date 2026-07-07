@@ -1,0 +1,42 @@
+/* Sistema de tema por strip. Cada sección declara data-aa-section-theme="light|dark";
+   eso remapea los tokens semánticos --aa-* → todos los componentes leen tokens, así
+   que se adaptan solos sin CSS por sección. */
+
+/* Dark: espresso de marca como fondo; ink claro como foreground. */
+.aa-landing [data-aa-section-theme="dark"] {
+  --aa-bg:        var(--aa-surface-dark);
+  --aa-bg-subtle: var(--aa-clay-900);
+  --aa-fg:        var(--aa-ink-light);
+  --aa-fg-muted:  rgba(252, 251, 250, 0.72);
+  --aa-fg-subtle: rgba(252, 251, 250, 0.48);
+  --aa-border:    rgba(252, 251, 250, 0.16);
+  --aa-accent:    var(--aa-clay-300);
+  --aa-accent-fg: var(--aa-surface-dark);
+  color: var(--aa-fg);
+}
+
+/* Light: valores por defecto (por si el root es dark y una sección se declara light). */
+.aa-landing [data-aa-section-theme="light"] {
+  --aa-bg:        var(--aa-surface-light);
+  --aa-bg-subtle: var(--aa-clay-50);
+  --aa-fg:        var(--aa-ink-dark);
+  --aa-fg-muted:  rgba(57, 41, 33, 0.66);
+  --aa-fg-subtle: rgba(57, 41, 33, 0.42);
+  --aa-border:    rgba(57, 41, 33, 0.14);
+  --aa-accent:    var(--aa-clay-700);
+  --aa-accent-fg: var(--aa-surface-light);
+  color: var(--aa-fg);
+}
+
+/* Optimización de overdraw: si el tema de la sección COINCIDE con el root, se pinta
+   transparente para dejar ver la capa fija .aa-landing::before (un solo repaint).
+   Si necesitas un fondo/borde visible en ese caso, píntalo con background-image:
+   linear-gradient(var(--aa-bg), var(--aa-bg)) — el transparent no pisa background-image. */
+.aa-landing[data-aa-theme="light"] [data-aa-section-theme="light"],
+.aa-landing[data-aa-theme="dark"]  [data-aa-section-theme="dark"] {
+  background-color: transparent;
+}
+.aa-landing[data-aa-theme="light"] [data-aa-section-theme="dark"],
+.aa-landing[data-aa-theme="dark"]  [data-aa-section-theme="light"] {
+  background-color: var(--aa-bg);
+}

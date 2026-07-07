@@ -1,0 +1,48 @@
+/* Fuentes self-hosted (Artegra Sans). URLs relativas a dist/landing.css (./fonts/…);
+   esbuild copia src/fonts → dist/fonts y marca *.otf external para conservar la URL
+   literal. Self-host (no R2) porque @font-face cross-origin exige CORS.
+   NOTA: archivos actuales son DEMO de Fontspring (solo evaluación) — sustituir por los
+   licenciados para producción (mismos nombres, sin cambios de código). */
+
+@font-face {
+  font-family: 'Artegra Sans';
+  src: url('./fonts/ArtegraSans-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Artegra Sans';
+  src: url('./fonts/ArtegraSans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Artegra Sans';
+  src: url('./fonts/ArtegraSans-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Artegra Sans';
+  src: url('./fonts/ArtegraSans-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Artegra Sans';
+  src: url('./fonts/ArtegraSans-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Artegra Sans';
+  src: url('./fonts/ArtegraSans-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}

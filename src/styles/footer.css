@@ -1,0 +1,59 @@
+/* Footer minimal: wordmark grande (izq) + 2 columnas de links (der), fondo oscuro. */
+
+.aa-landing .aa-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--aa-gap-xl);
+  max-width: var(--aa-container-max);
+  margin-inline: auto;
+  padding: var(--aa-section-pad) var(--aa-gutter);
+}
+
+.aa-landing .aa-footer__logo {
+  /* Mega wordmark: escala con el viewport, tope generoso. */
+  height: clamp(3.5rem, 10vw, 8rem);
+  width: auto;
+}
+
+.aa-landing .aa-footer__nav {
+  display: flex;
+  gap: var(--aa-gap-xxl);
+}
+
+.aa-landing .aa-footer__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-s);
+}
+
+.aa-landing .aa-footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aa-gap-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.aa-landing .aa-footer__link {
+  font-size: var(--aa-text-s);
+  color: var(--aa-fg);
+  text-decoration: none;
+}
+.aa-landing .aa-footer__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* En wrap: logo arriba, columnas debajo. */
+@media screen and (max-width: 767px) {
+  .aa-landing .aa-footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .aa-landing .aa-footer__nav {
+    gap: var(--aa-gap-xl);
+  }
+}

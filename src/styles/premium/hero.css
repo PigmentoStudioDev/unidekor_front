@@ -1,0 +1,34 @@
+/* Hero premium: card con scrim sobre imagen de fondo full-bleed. */
+
+.aa-landing .aa-hero-p {
+  padding-block: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Compensa el navbar fijo para que el contenido no arranque tapado. */
+  padding-top: var(--aa-navbar-height);
+}
+
+.aa-landing .aa-hero-p__inner {
+  min-height: 90vh;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--aa-section-pad) var(--aa-gutter);
+  /* Scrim: oscurece la base de la foto para que el card sea legible sin taparla
+     por completo (a diferencia de un overlay sólido en toda la sección). */
+  background: linear-gradient(to top, rgba(35, 26, 22, 0.88), rgba(35, 26, 22, 0) 60%);
+}
+
+.aa-landing .aa-hero-p__card {
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--aa-gap-m);
+}
+
+.aa-landing .aa-hero-p__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--aa-gap-s);
+}
