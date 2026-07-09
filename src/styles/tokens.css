@@ -160,6 +160,15 @@
     --aa-size-container-ideal: 720;
     --aa-size-container-min: 480px;
     --aa-size-container-max: 767px;
+    /* Aumentar tipografía en mobile: 50% más en los mínimos del clamp */
+    --aa-text-xxl: clamp(calc(var(--aa-size-font) * 3), 4vw, calc(var(--aa-size-font) * 3.25));
+    --aa-text-xl:  clamp(calc(var(--aa-size-font) * 2.625), 3.25vw, calc(var(--aa-size-font) * 2.75));
+    --aa-text-l:   clamp(calc(var(--aa-size-font) * 2.25), 2.5vw, calc(var(--aa-size-font) * 2.1));
+    --aa-text-ml:  clamp(calc(var(--aa-size-font) * 1.95), 2vw, calc(var(--aa-size-font) * 1.7));
+    --aa-text-m:   clamp(calc(var(--aa-size-font) * 1.65), 1.6vw, calc(var(--aa-size-font) * 1.4));
+    --aa-text-s:   clamp(calc(var(--aa-size-font) * 1.425), 1.2vw, calc(var(--aa-size-font) * 1.1));
+    --aa-text-xs:  calc(var(--aa-size-font) * 1.275);
+    --aa-text-xxs: calc(var(--aa-size-font) * 1.08);
   }
 }
 

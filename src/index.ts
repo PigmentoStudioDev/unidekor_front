@@ -14,6 +14,8 @@ import { renderNavbar } from './sections/navbar';
 import { initNavbar } from './ui/navbar';
 import { initNavMobile } from './ui/nav-mobile';
 import { renderHero } from './sections/hero';
+import { renderMountIntro } from './sections/loader';
+import { initMountIntro } from './ui/loader';
 import { renderProducts } from './sections/products';
 import { renderQuote } from './sections/quote';
 import { renderFaq } from './sections/faq';
@@ -56,8 +58,22 @@ function resolvePage(raw: string | undefined): Page {
   return (PAGES as readonly string[]).includes(value) ? (value as Page) : 'home';
 }
 
-// Home: hero + productos + cotiza + FAQ + contacto/mapa.
+// La intro de mount corre SOLO en el primer mount de la sesión: sessionStorage → una vez
+// por pestaña. En visitas repetidas a home dentro de la sesión el hero monta sin overlay.
+// Si no está disponible (modo privado, etc.) se muestra por defecto.
+function shouldPlayMountIntro(): boolean {
+  try {
+    if (sessionStorage.getItem('aa-mount-shown')) return false;
+    sessionStorage.setItem('aa-mount-shown', '1');
+    return true;
+  } catch {
+    return true;
+  }
+}
+
+// Home: intro de mount (solo primer mount) + hero + productos + cotiza + FAQ + contacto.
 function renderHome(root: HTMLElement, lang: Lang): void {
+  renderMountIntro(root, shouldPlayMountIntro());
   renderHero(root, lang);
   renderProducts(root, lang);
   renderQuote(root, lang);
@@ -101,6 +117,8 @@ function boot(): void {
     mount.replaceChildren(root);
 
     // Fase de init: enganches de comportamiento/animación una vez montado el DOM.
+    // Mount intro: solo home. Sin overlay (visita repetida) hace no-op internamente.
+    if (page === 'home') initMountIntro(root);
     initAnchorScroll(root);
     initNavbar(root);
     initNavMobile(root);

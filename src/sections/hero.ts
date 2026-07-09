@@ -34,21 +34,17 @@ export function renderHero(root: HTMLElement, lang: Lang): void {
   const headingBox = el('div', 'aa-hero__heading');
   const title = el('h1', 'aa-h-xxl');
   title.textContent = t.title;
-  title.setAttribute('data-aa-split', 'mount');
   headingBox.append(title);
 
-  // Wrapper row de CTAs (primario + secundario) debajo del heading.
+  // Wrapper row de CTAs (primario + secundario) debajo del heading. Sin entrance de
+  // scroll: el reveal del hero lo hace el wipe por celda de la mount intro (ui/loader.ts).
   const ctas = el('div', 'aa-hero__ctas');
-  ctas.setAttribute('data-aa-fade', '');
-  ctas.setAttribute('data-aa-delay', '0.1');
   const ctaPrimary = button('aa-btn', t.ctaPrimary, { href: '#inicio' });
   const ctaSecondary = button('aa-btn aa-btn--ghost', t.ctaSecondary, { href: '#inicio' });
   ctas.append(ctaPrimary, ctaSecondary);
 
   // Mitad inferior (50%): dos containers al 50% en row.
   const split = el('div', 'aa-hero__split');
-  split.setAttribute('data-aa-fade', '');
-  split.setAttribute('data-aa-delay', '0.2');
   const block1 = el('div', 'aa-hero__block');
   const block2 = el('div', 'aa-hero__block');
   block1.style.backgroundImage = `url("${IMAGES.heroB}")`;

@@ -1,0 +1,71 @@
+/* Mount intro (marca → flood → reveal). Overlay del primer mount de home; el markup
+   vive en sections/loader.ts y la timeline en ui/loader.ts. Scopeado a .aa-landing. */
+
+/* Overlay total: campo claro OPACO desde el frame 0 (el "blanco" del GIF de Kram) que
+   cubre el hero mientras corre la intro. initMountIntro lo vuelve transparent justo antes
+   del wipe para que el reveal descubra el hero y no este campo.
+   Flex-center la tarjeta (en vez de translate -50%): GSAP maneja scale/rotate de la
+   tarjeta sin chocar con un transform de centrado. El cover es absolute → fuera del flow. */
+.aa-landing .aa-mount {
+  z-index: 100;
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--aa-clay-50);
+}
+
+/* Bloquea el scroll mientras el overlay está activo (initMountIntro quita is--active). */
+.aa-landing:has(.aa-mount.is--active) {
+  overflow: clip;
+}
+
+/* Panel full-bleed que inunda desde el centro (scale 0→1) y se retira con el wipe.
+   transform-origin center: el flood crece desde el punto donde estuvo la tarjeta. */
+.aa-landing .aa-mount__cover {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  background-color: var(--aa-clay-950);
+  /* GSAP escala/desliza el panel: capa de compositor para no repintar cada frame.
+     initMountIntro lo libera (auto) al terminar. */
+  will-change: transform;
+}
+
+/* Tarjeta portrait que emerge con el mark y hace el wobble antes del flood.
+   Centrada por el flex del container; z-order sobre el cover (va después en el DOM). */
+.aa-landing .aa-mount__card {
+  position: relative;
+  width: 5em;
+  aspect-ratio: 3 / 4;
+  font-size: max(2vw, 2.25em);
+  border-radius: 0.4em;
+  background-color: var(--aa-clay-950);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: clip;
+  will-change: transform;
+}
+
+/* Panel del reveal por celda: posición/tamaño se fijan inline (medidos de cada celda
+   del hero en ui/loader.ts). transformOrigin lo pone GSAP (right center) → el scaleX→0
+   retrae hacia la derecha descubriendo la celda izq→der, dentro de su propia caja. */
+.aa-landing .aa-mount__panel {
+  position: fixed;
+  background-color: var(--aa-clay-950);
+  will-change: transform;
+}
+
+.aa-landing .aa-mount__mark {
+  width: 62%;
+  will-change: transform;
+}
+
+.aa-landing .aa-mount__mark-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
