@@ -107,6 +107,34 @@
   align-self: flex-start;
 }
 
+/* Honeypot: fuera de pantalla, sin ocupar espacio ni recibir foco de teclado. No usar
+   display:none (algunos bots lo detectan y lo saltan). */
+.aa-landing .aa-quote__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Mensaje de estado del envío (ok/error). Hereda color claro del panel; variantes lo tintan. */
+.aa-landing .aa-quote__status {
+  margin: 0;
+  font-family: var(--aa-font);
+  font-size: var(--aa-text-s);
+  color: var(--aa-surface-light);
+}
+.aa-landing .aa-quote__status:empty {
+  display: none;
+}
+.aa-landing .aa-quote__status--ok {
+  color: var(--aa-clay-100);
+}
+.aa-landing .aa-quote__status--error {
+  color: #ffb4a2;
+}
+
 /* Columna derecha: imagen de producto en formato 1:1. align-self:center evita que el
    stretch del grid la deforme cuando el panel es más alto. */
 .aa-landing .aa-quote__media {

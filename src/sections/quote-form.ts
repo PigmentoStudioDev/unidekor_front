@@ -1,15 +1,75 @@
 // Form de cotización reutilizable (home + página de contacto). Devuelve solo los campos +
 // submit; el heading/intro los aporta cada sección. El nombre del campo va como placeholder
-// (sin label visible); aria-label preserva la accesibilidad. Sin backend aún: submit no-op.
+// (sin label visible); aria-label preserva la accesibilidad. El submit hace POST al proxy
+// Edge (repo unidekor-quote-api en Vercel), que valida y envía el email vía Resend. La URL
+// no es secreta: el proxy se defiende con CORS allowlist + honeypot + validación server-side.
 import type { Lang } from '../core/types';
 import { el } from '../core/dom';
 import { button } from '../ui/button';
 import { QUOTE } from '../constants/content';
 
+// URL absoluta del proxy en Vercel. Reemplazar tras el primer deploy de unidekor-quote-api.
+const QUOTE_ENDPOINT = 'https://unidekor-quote-api.vercel.app/api/quote';
+
+const STATUS: Record<Lang, { sending: string; ok: string; error: string }> = {
+  es: {
+    sending: 'Enviando…',
+    ok: 'Gracias, recibimos tu solicitud. Te contactaremos pronto.',
+    error: 'No se pudo enviar. Revisa los datos e inténtalo de nuevo.',
+  },
+  en: {
+    sending: 'Sending…',
+    ok: 'Thanks, we received your request. We will contact you soon.',
+    error: 'Could not send. Check the fields and try again.',
+  },
+};
+
 export function renderQuoteForm(lang: Lang): HTMLFormElement {
   const t = QUOTE[lang];
+  const msg = STATUS[lang];
   const form = el('form', 'aa-quote__form');
-  form.addEventListener('submit', (e) => e.preventDefault());
+
+  // Honeypot: campo oculto que los humanos no ven; si llega lleno, el proxy lo trata como bot.
+  const honeypot = el('input', 'aa-quote__hp', {
+    type: 'text',
+    name: 'website',
+    tabindex: '-1',
+    autocomplete: 'off',
+    'aria-hidden': 'true',
+  });
+
+  const status = el('p', 'aa-quote__status', { role: 'status', 'aria-live': 'polite' });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const label = submitBtn?.querySelector<HTMLElement>('.aa-btn__text');
+    const original = label?.textContent ?? t.submit;
+
+    if (submitBtn) submitBtn.disabled = true;
+    if (label) label.textContent = msg.sending;
+    status.className = 'aa-quote__status';
+    status.textContent = '';
+
+    try {
+      const data = Object.fromEntries(new FormData(form));
+      const res = await fetch(QUOTE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('request_failed');
+      form.reset();
+      status.className = 'aa-quote__status aa-quote__status--ok';
+      status.textContent = msg.ok;
+    } catch {
+      status.className = 'aa-quote__status aa-quote__status--error';
+      status.textContent = msg.error;
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+      if (label) label.textContent = original;
+    }
+  });
 
   const fields = el('div', 'aa-quote__fields');
   fields.setAttribute('data-aa-stagger', '');
@@ -60,6 +120,6 @@ export function renderQuoteForm(lang: Lang): HTMLFormElement {
   });
 
   const submit = button('aa-btn', t.submit, { type: 'submit' });
-  form.append(fields, submit);
+  form.append(honeypot, fields, submit, status);
   return form;
 }
