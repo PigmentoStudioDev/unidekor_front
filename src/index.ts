@@ -1,9 +1,6 @@
 // Entry point. Cada punto de montaje declara su configuración por atributos:
 //   <div data-aa-mount data-aa-theme="light|dark" data-aa-lang="es|en"></div>
-//   <script data-cfasync="false"
-//     src="https://cdn.jsdelivr.net/gh/karenrebecag/unidekor@latest/loader.js"></script>
-const _v = document.querySelector<HTMLScriptElement>('script[src*="unidekor@"]')?.src.match(/unidekor@([^/]+)/)?.[1] ?? 'dev';
-console.log(`[unidekor] v${_v} loaded`);
+//   <script data-cfasync="false" src="https://<proyecto>.vercel.app/loader.js"></script>
 
 import { type Theme, type Lang, type Page, PAGES } from './core/types';
 import { initMotion } from './ui/motion';

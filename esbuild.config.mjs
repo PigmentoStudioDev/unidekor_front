@@ -1,74 +1,92 @@
 import * as esbuild from 'esbuild';
-import { cpSync, existsSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { basename } from 'node:path';
 
-// Self-hosted fonts: copia src/fonts → dist/fonts si existen. Las @font-face referencian
-// ./fonts/... (relativo a dist/landing.css), así que deben vivir junto al CSS.
-if (existsSync('src/fonts')) cpSync('src/fonts', 'dist/fonts', { recursive: true });
+const dev = process.argv.includes('--watch') || process.argv.includes('--serve');
 
-// Bundle TS + GSAP + CSS hacia dist/. jsDelivr sirve el tag versionado.
-const shared = {
+// Self-hosted fonts: las @font-face apuntan a ./fonts/… relativo al CSS, así que deben vivir
+// junto a él (dist/assets). Autohospedadas y no en R2 porque un @font-face cross-origin sin
+// cabeceras CORS falla, y el bundle corre en dominios host que no controlamos.
+if (existsSync('src/fonts')) cpSync('src/fonts', 'dist/assets/fonts', { recursive: true });
+
+// Hash solo en prod (cache inmutable). En dev los nombres son estables para que el loader y
+// la página de preview los enlacen sin recalcular el hash en cada rebuild.
+const options = {
+  entryPoints: { landing: 'src/index.ts', styles: 'src/styles/landing.css' },
+  outdir: 'dist/assets',
+  entryNames: dev ? '[name]' : '[name].[hash]',
   bundle: true,
   format: 'esm',
   target: ['es2019'],
-  logLevel: 'info',
-};
-
-const jsOptions = {
-  ...shared,
-  entryPoints: ['src/index.ts'],
-  outfile: 'dist/landing.js',
-  minify: true,
+  minify: !dev,
   sourcemap: true,
-};
-
-const cssOptions = {
-  ...shared,
-  entryPoints: ['src/styles/landing.css'],
-  outfile: 'dist/landing.css',
-  minify: true,
+  metafile: true,
+  logLevel: 'info',
   // Conserva las URLs de fuentes literales (./fonts/...) en vez de empaquetarlas.
   external: ['*.woff2', '*.otf', '*.ttf'],
 };
 
-// Página premium (preview-premium.html): mismo sistema de marca (tokens/fuentes
-// compartidos vía @import en premium.css), bundle separado para no tocar landing.js/css.
-const premiumJsOptions = {
-  ...shared,
-  entryPoints: ['src/premium.ts'],
-  outfile: 'dist/premium.js',
-  minify: true,
-  sourcemap: true,
-};
+// El loader es el único contrato con el host: un <script> sin versión que mantener. Se
+// regenera en cada build con los nombres hasheados ya resueltos, así los bundles se cachean
+// como inmutables y aun así el host recibe el build nuevo. Reemplaza el pin de tag + purga
+// que exigía jsDelivr.
+function writeLoader(js, css) {
+  const src = `(function () {
+  if (window.__aaUnidekor) return;
+  window.__aaUnidekor = true;
 
-const premiumCssOptions = {
-  ...cssOptions,
-  entryPoints: ['src/styles/premium.css'],
-  outfile: 'dist/premium.css',
-};
+  var self = document.currentScript || document.querySelector('script[src*="loader.js"]');
+  var base = self ? self.src.replace(/\\/loader\\.js.*$/, '') : '';
 
-const watch = process.argv.includes('--watch');
-const serve = process.argv.includes('--serve');
+  var css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = base + '/assets/${css}';
+  document.head.appendChild(css);
 
-if (watch || serve) {
-  const [jsCtx, cssCtx, premiumJsCtx, premiumCssCtx] = await Promise.all([
-    esbuild.context(jsOptions),
-    esbuild.context(cssOptions),
-    esbuild.context(premiumJsOptions),
-    esbuild.context(premiumCssOptions),
-  ]);
-  await Promise.all([jsCtx.watch(), cssCtx.watch(), premiumJsCtx.watch(), premiumCssCtx.watch()]);
-  if (serve) {
-    // Solo un contexto abre el servidor HTTP (sirve todo el servedir, incluye ambos bundles).
-    const { host, port } = await jsCtx.serve({ servedir: '.', port: Number(process.env.PORT) || 8770 });
-    console.log(`dev server: http://${host}:${port}`);
+  var js = document.createElement('script');
+  js.type = 'module';
+  js.setAttribute('data-cfasync', 'false');
+  js.src = base + '/assets/${js}';
+  document.head.appendChild(js);
+})();
+`;
+  mkdirSync('dist', { recursive: true });
+  writeFileSync('dist/loader.js', src);
+}
+
+// Copia la página de preview al deploy (dist/), sirviendo de demo hosteada y, en dev, de
+// página que abre el server (servedir: dist). Carga el loader mismo-origen (./loader.js).
+function copyPreview() {
+  mkdirSync('dist', { recursive: true });
+  writeFileSync('dist/index.html', readFileSync('index.html', 'utf8'));
+}
+
+// Con metafile, toma los nombres hasheados de los ENTRY outputs (ignora .map y chunks, que
+// no tienen entryPoint).
+function hashedNames(metafile) {
+  let js, css;
+  for (const [file, meta] of Object.entries(metafile.outputs)) {
+    if (!meta.entryPoint) continue;
+    if (file.endsWith('.js')) js = basename(file);
+    else if (file.endsWith('.css')) css = basename(file);
+  }
+  return { js, css };
+}
+
+if (dev) {
+  const ctx = await esbuild.context(options);
+  await ctx.watch();
+  writeLoader('landing.js', 'styles.css');
+  copyPreview();
+  if (process.argv.includes('--serve')) {
+    const { host, port } = await ctx.serve({ servedir: 'dist', port: Number(process.env.PORT) || 8770 });
+    console.log(`dev server: http://${host}:${port}/`);
   } else {
     console.log('watching src/...');
   }
 } else {
-  await Promise.all([
-    esbuild.build(jsOptions),
-    esbuild.build(cssOptions),
-    esbuild.build(premiumJsOptions),
-    esbuild.build(premiumCssOptions),
-  ]);
+  const { metafile } = await esbuild.build(options);
+  const { js, css } = hashedNames(metafile);
+  writeLoader(js, css);
+  copyPreview();
 }
