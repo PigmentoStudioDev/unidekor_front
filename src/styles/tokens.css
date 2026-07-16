@@ -132,9 +132,6 @@
   --aa-content-max:  800px;
   --aa-container-max: 1280px;
 
-  /* Alto del navbar fijo (página premium) — usado para compensar padding-top. */
-  --aa-navbar-height: 4.5em;
-
   /* ─── Botón ────────────────────────────────────────────────────────────────────
      Spacing del patrón Button 016 de OSMO (0.75em / 1em): em relativo a la fuente
      del botón (que ya es el token fluido --aa-text-s), así el padding acompaña al

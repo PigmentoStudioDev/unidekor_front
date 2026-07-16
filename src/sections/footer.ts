@@ -22,8 +22,7 @@ function renderLinkColumn(title: string, links: { label: string; href: string }[
   return column;
 }
 
-// copy opcional: permite reusar el mismo footer con contenido distinto (p. ej. la
-// página premium, donde Nosotros/Galería apuntan a secciones reales).
+// copy opcional: permite reusar el mismo footer con contenido distinto.
 export function renderFooter(root: HTMLElement, lang: Lang, copy?: FooterCopy): void {
   const t = copy ?? FOOTER[lang];
 
