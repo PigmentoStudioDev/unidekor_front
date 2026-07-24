@@ -15,14 +15,15 @@
    3 capas apiladas en un grid 1/1: __inner (texto, clip) + __bg (fondo que hace
    swap de color). En hover el texto rueda hacia arriba y un duplicado (text-shadow)
    entra desde abajo, mientras el fondo cambia de color. Todo tokenizado: cada
-   variante define sus 4 colores (rest/hover × texto/fondo) con vars --aa-btn-*,
-   así se adapta al tema del strip. Respeta prefers-reduced-motion. */
+   variante define sus 4 colores (rest/hover × texto/fondo) con vars --aa-btn-*.
+   Café/blanco fijos (NO tokens de tema --aa-fg/--aa-bg): la marca quiere el mismo
+   par de colores sin importar el strip donde caiga el botón. Respeta prefers-reduced-motion. */
 .aa-landing .aa-btn {
-  /* Colores por defecto = variante filled (accent). */
-  --aa-btn-color: var(--aa-accent-fg);
-  --aa-btn-bg: var(--aa-accent);
-  --aa-btn-hover-color: var(--aa-accent);
-  --aa-btn-hover-bg: var(--aa-accent-fg);
+  /* Primary: bg blanco sólido, texto+stroke café. Hover invierte (ver .aa-btn--ghost). */
+  --aa-btn-color: var(--aa-clay-700);
+  --aa-btn-bg: var(--aa-surface-light);
+  --aa-btn-hover-color: var(--aa-surface-light);
+  --aa-btn-hover-bg: var(--aa-surface-dark);
   /* Distancia del roll: ~1.8 líneas (line-height 1 ⇒ 1em = 1 línea). Debe superar
      la altura del texto para que el duplicado quede clipeado en reposo. */
   --aa-btn-roll: 1.8em;
@@ -44,7 +45,8 @@
   transition: color 0.325s var(--aa-ease);
 }
 
-/* Contenido: reserva 1px de borde (igual que --ghost) para no variar la altura. */
+/* Contenido: stroke café siempre visible (primary y --ghost comparten el mismo borde,
+   solo bg/fg se invierten). Sin radius: esquinas cuadradas en toda variante. */
 .aa-landing .aa-btn__inner {
   grid-area: 1 / 1;
   z-index: 1;
@@ -53,8 +55,8 @@
   justify-content: center;
   gap: var(--aa-gap-xxs);
   padding: var(--aa-btn-pad-y) var(--aa-btn-pad-x);
-  border: 1px solid transparent;
-  border-radius: var(--aa-radius-m);
+  border: 1px solid var(--aa-clay-700);
+  border-radius: 0;
   overflow: clip;
   pointer-events: none;
 }
@@ -70,7 +72,7 @@
   grid-area: 1 / 1;
   width: 100%;
   height: 100%;
-  border-radius: var(--aa-radius-m);
+  border-radius: 0;
   background: var(--aa-btn-bg);
   pointer-events: none;
   transition: background-color 0.325s var(--aa-ease);
@@ -84,7 +86,7 @@
   content: '';
   position: absolute;
   inset: -0.15em;
-  border-radius: var(--aa-radius-l);
+  border-radius: 0;
   transition: box-shadow 0.3s var(--aa-ease);
   pointer-events: none;
   z-index: 2;
@@ -93,21 +95,17 @@
   box-shadow: 0 0 0 2px var(--aa-fg);
 }
 
-/* Variante secundaria (contorno). En reposo: texto + borde = --aa-fg, sin fondo.
-   En hover se INVIERTE: el fondo se llena con --aa-fg y el texto pasa a --aa-bg.
-   En un strip oscuro eso es: reposo blanco/borde blanco → hover fondo blanco +
-   texto oscuro (--aa-bg = surface-dark). En un strip claro, al revés. */
-   Doble clase (.aa-btn.aa-btn--ghost, especificidad 0,3,0) para ganarle SIEMPRE a
-   la base (.aa-btn, 0,2,0) sin depender del orden — esbuild reordena reglas de
-   igual especificidad al minificar y la base terminaba pisando estos overrides. */
+/* Variante secundaria: el primary con bg/fg invertidos (mismo stroke café en ambas).
+   Reposo: bg --aa-surface-dark + texto blanco. Hover invierte otra vez → bg blanco +
+   texto café (queda igual al primary en reposo). Doble clase (.aa-btn.aa-btn--ghost, especificidad
+   0,3,0) para ganarle SIEMPRE a la base (.aa-btn, 0,2,0) sin depender del orden — esbuild
+   reordena reglas de igual especificidad al minificar y la base terminaba pisando estos
+   overrides. */
 .aa-landing .aa-btn.aa-btn--ghost {
-  --aa-btn-color: var(--aa-fg);
-  --aa-btn-bg: transparent;
-  --aa-btn-hover-color: var(--aa-bg);
-  --aa-btn-hover-bg: var(--aa-fg);
-}
-.aa-landing .aa-btn.aa-btn--ghost .aa-btn__inner {
-  border-color: var(--aa-border);
+  --aa-btn-color: var(--aa-surface-light);
+  --aa-btn-bg: var(--aa-surface-dark);
+  --aa-btn-hover-color: var(--aa-clay-700);
+  --aa-btn-hover-bg: var(--aa-surface-light);
 }
 
 /* Variante compacta — su propio par de tokens de padding + fuente más chica. */
