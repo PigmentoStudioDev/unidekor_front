@@ -6,7 +6,7 @@ import type { Lang } from '../core/types';
 import { el } from '../core/dom';
 import { button } from '../ui/button';
 import { HERO } from '../constants/content';
-import { IMAGES } from '../constants/assets';
+import { IMAGES, DOCS } from '../constants/assets';
 
 export function renderHero(root: HTMLElement, lang: Lang): void {
   const t = HERO[lang];
@@ -40,7 +40,12 @@ export function renderHero(root: HTMLElement, lang: Lang): void {
   // scroll: el reveal del hero lo hace el wipe por celda de la mount intro (ui/loader.ts).
   const ctas = el('div', 'aa-hero__ctas');
   const ctaPrimary = button('aa-btn', t.ctaPrimary, { href: '#inicio' });
-  const ctaSecondary = button('aa-btn aa-btn--ghost', t.ctaSecondary, { href: '#inicio' });
+  const ctaSecondary = button('aa-btn aa-btn--ghost', t.ctaSecondary, {
+    href: DOCS.presentation,
+    download: '',
+    target: '_blank',
+    rel: 'noopener',
+  });
   ctas.append(ctaPrimary, ctaSecondary);
 
   // Mitad inferior (50%): dos containers al 50% en row.

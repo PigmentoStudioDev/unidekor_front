@@ -113,7 +113,6 @@ export interface ProductsCopy {
   subheading: string;
   ctaPrimary: string;
   ctaSecondary: string;
-  cardCta: string;
   services: ServiceItem[];
 }
 
@@ -122,12 +121,12 @@ export const HERO: Record<Lang, HeroCopy> = {
   es: {
     title: 'PISOS VINÍLICOS\nPARA TU NEGOCIO',
     ctaPrimary: 'COTIZA AHORA',
-    ctaSecondary: 'VER PRODUCTOS',
+    ctaSecondary: 'DESCARGAR CATÁLOGO',
   },
   en: {
     title: 'VINYL FLOORING\nFOR YOUR BUSINESS',
     ctaPrimary: 'GET A QUOTE',
-    ctaSecondary: 'VIEW PRODUCTS',
+    ctaSecondary: 'DOWNLOAD CATALOG',
   },
 };
 
@@ -138,8 +137,7 @@ const PRODUCTS_ES: ProductsCopy = {
   subheading:
     'En Unidekor contamos con una amplia variedad de pisos vinílicos, con composiciones específicas para los distintos tipos de espacios que tu proyecto puede incluir.',
   ctaPrimary: 'COTIZA AHORA',
-  ctaSecondary: 'VER PRODUCTOS',
-  cardCta: 'VER MÁS',
+  ctaSecondary: 'DESCARGAR CATÁLOGO',
   services: [
     {
       title: 'LUJO',

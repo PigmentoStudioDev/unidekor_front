@@ -5,6 +5,7 @@ import type { Lang } from '../core/types';
 import { el } from '../core/dom';
 import { button } from '../ui/button';
 import { PRODUCTS } from '../constants/content';
+import { DOCS } from '../constants/assets';
 
 export function renderProducts(root: HTMLElement, lang: Lang): void {
   const t = PRODUCTS[lang];
@@ -30,10 +31,16 @@ export function renderProducts(root: HTMLElement, lang: Lang): void {
   const actions = el('div', 'aa-products__actions');
   actions.setAttribute('data-aa-fade', '');
   actions.setAttribute('data-aa-delay', '0.2');
-  // Orden fiel al mockup: ghost (Ver productos) arriba, filled (Cotiza ahora) abajo.
-  const secondary = button('aa-btn aa-btn--ghost', t.ctaSecondary, { href: '#productos' });
-  const primary = button('aa-btn', t.ctaPrimary, { href: '#contacto' });
-  actions.append(secondary, primary);
+  // Orden fiel al mockup: primary (Descargar catálogo) arriba, secondary (Cotiza ahora)
+  // abajo — roles invertidos respecto al hero (ahí Cotiza es el primary).
+  const download = button('aa-btn', t.ctaSecondary, {
+    href: DOCS.presentation,
+    download: '',
+    target: '_blank',
+    rel: 'noopener',
+  });
+  const quote = button('aa-btn aa-btn--ghost', t.ctaPrimary, { href: '#contacto' });
+  actions.append(download, quote);
 
   intro.append(heading, sub, actions);
 
@@ -49,9 +56,7 @@ export function renderProducts(root: HTMLElement, lang: Lang): void {
     const desc = el('p', 'aa-p-m');
     desc.textContent = s.description;
 
-    const cta = button('aa-btn aa-btn--ghost aa-btn--sm', t.cardCta, { href: '#productos' });
-
-    card.append(title, desc, cta);
+    card.append(title, desc);
     list.append(card);
   });
 
