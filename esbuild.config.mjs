@@ -10,6 +10,10 @@ const dev = process.argv.includes('--watch') || process.argv.includes('--serve')
 // cabeceras CORS falla, y el bundle corre en dominios host que no controlamos.
 if (existsSync('src/fonts')) cpSync('src/fonts', 'dist/assets/fonts', { recursive: true });
 
+// Estáticos de raíz (favicons + webmanifest): se sirven desde / en el deploy. El host que
+// monta el bundle controla su propio <head>, así que esto aplica al sitio en Vercel.
+if (existsSync('public')) cpSync('public', 'dist', { recursive: true });
+
 // Hash solo en prod (cache inmutable). En dev los nombres son estables para que el loader y
 // la página de preview los enlacen sin recalcular el hash en cada rebuild.
 const options = {
@@ -55,12 +59,10 @@ function writeLoader(js, css) {
   writeFileSync('dist/loader.js', src);
 }
 
-// Páginas estáticas que van al deploy respetando su ruta. `page` indica qué página del
-// bundle hornear dentro de su div de montaje (ver prerender.mjs); sin `page` se copia tal
-// cual, como la documentación, que no monta el bundle.
-// Con cleanUrls de Vercel (vercel.json), how-to-install.html queda en /docs/how-to-install.
 // `src` es la ruta en el repo y `dest` la del deploy: las páginas viven bajo preview/ pero se
-// sirven desde la raíz de dist. Con cleanUrls (vercel.json), nosotros.html queda en /nosotros.
+// sirven desde la raíz de dist. `page` indica qué página del bundle hornear dentro de su div de
+// montaje (ver prerender.mjs); sin `page` se copia tal cual, como la documentación, que no monta
+// el bundle. Con cleanUrls de Vercel (vercel.json), nosotros.html queda servida en /nosotros.
 const STATIC_PAGES = [
   { src: 'preview/index.html', dest: 'index.html', page: 'home' },
   { src: 'preview/nosotros.html', dest: 'nosotros.html', page: 'nosotros' },

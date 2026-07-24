@@ -57,9 +57,26 @@ function upsertMeta(document, selector, attrs) {
   document.head.appendChild(tag);
 }
 
-// Hornea title, description, canonical, Open Graph y Twitter Card desde src/constants/seo.ts.
-// El canonical apunta al dominio público aunque la página se sirva desde Vercel: es lo que
-// evita que el deploy compita con el sitio real por contenido duplicado.
+// Favicons y webmanifest, servidos desde la raíz del deploy (ver public/ y esbuild.config.mjs).
+// Rutas absolutas a propósito: estas etiquetas solo existen en el HTML que sirve Vercel; cuando
+// el bundle se monta en un host, el <head> es suyo y el favicon lo pone él.
+const ICONS = [
+  { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png', sizes: '96x96' },
+  { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+  { rel: 'shortcut icon', href: '/favicon.ico' },
+  { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+  { rel: 'manifest', href: '/site.webmanifest' },
+];
+
+function injectIcons(document) {
+  for (const attrs of ICONS) {
+    upsertMeta(document, `link[rel="${attrs.rel}"][href="${attrs.href}"]`, attrs);
+  }
+}
+
+// Hornea title, description, canonical, Open Graph, Twitter Card e iconos desde
+// src/constants/seo.ts. El canonical apunta al dominio público aunque la página se sirva desde
+// Vercel: es lo que evita que el deploy compita con el sitio real por contenido duplicado.
 function injectHead(document, seo, origin) {
   const url = `${origin}${seo.path}`;
 
@@ -78,6 +95,8 @@ function injectHead(document, seo, origin) {
   upsertMeta(document, 'meta[name="twitter:card"]', { name: 'twitter:card', content: 'summary_large_image' });
   upsertMeta(document, 'meta[name="twitter:title"]', { name: 'twitter:title', content: seo.title });
   upsertMeta(document, 'meta[name="twitter:description"]', { name: 'twitter:description', content: seo.description });
+
+  injectIcons(document);
 }
 
 // robots.txt permisivo a propósito, incluso en el deploy de Vercel: Googlebot necesita poder
