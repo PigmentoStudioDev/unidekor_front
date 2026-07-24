@@ -9,7 +9,7 @@ export function renderContact(root: HTMLElement, lang: Lang): void {
   const t = CONTACT[lang];
 
   const section = el('section', 'aa-contact', {
-    'data-aa-section-theme': 'dark',
+    'data-aa-section-theme': 'light',
     id: 'ubicacion',
   });
   const inner = el('div', 'aa-contact__inner');

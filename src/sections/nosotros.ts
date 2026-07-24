@@ -10,7 +10,9 @@ import { IMAGES } from '../constants/assets';
 export function renderQuienesHeader(root: HTMLElement, lang: Lang): void {
   const t = NOSOTROS_PAGE[lang];
   const section = el('section', 'aa-quienes-hero', {
-    'data-aa-section-theme': 'light',
+    // dark: el fondo es una foto de madera, así que los fg (título + navbar, vía
+    // initSectionThemeNav) tienen que ir claros para leerse encima.
+    'data-aa-section-theme': 'dark',
     id: 'quienes',
   });
   section.style.backgroundImage = `url("${IMAGES.quienesHero}")`;
