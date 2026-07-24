@@ -1,5 +1,6 @@
-/* Navbar global. Logo izquierda + navlinks a la derecha (sin CTA). Barra sólida fija sobre
-   el fondo del root; color de marca vía tokens semánticos (fg/bg) para seguir el tema. */
+/* Navbar global. Logo izquierda + navlinks a la derecha (sin CTA). Barra fija transparente:
+   el color de texto/logo sigue el tema de la sección detrás vía [data-aa-nav-theme]
+   (ui/section-theme-nav.ts remapea ese atributo al hacer scroll). */
 
 .aa-landing .aa-nav {
   position: fixed;
@@ -13,31 +14,14 @@
   gap: var(--aa-gap-l);
   width: 100%;
   padding: 1.5rem 3vw;
-  /* Transparente en el top (y=0): el fondo sólido lo pinta ::before, que hace fade al
-     scrollear (is--scrolled). Así la barra flota sobre el hero al inicio. */
+  /* Siempre transparente: la barra flota sobre el contenido en toda la página, sin fondo
+     sólido al scrollear. */
   transition: transform var(--aa-duration-s) var(--aa-ease);
 }
 
-/* Capa de fondo sólido + borde, oculta en el top y visible al scrollear. background-image
-   (no -color) porque el overdraw del section-theme fuerza background-color:transparent. */
-.aa-landing .aa-nav::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image: linear-gradient(var(--aa-bg), var(--aa-bg));
-  border-bottom: 1px solid var(--aa-border);
-  opacity: 0;
-  transition: opacity var(--aa-duration-s) var(--aa-ease);
-}
-
-.aa-landing .aa-nav.is--scrolled::before {
-  opacity: 1;
-}
-
-/* Viñeta global en top0: oscurece la franja superior para que el contenido blanco del
-   navbar se lea sobre páginas claras o hero. Se extiende bajo la barra (height > alto del
-   navbar) para el degradado y se desvanece al scrollear (ya hay barra sólida). */
+/* Viñeta: oscurece la franja superior para que el texto/logo claro del navbar se lea sobre
+   fotografía edge-to-edge (asides del hero). Se extiende bajo la barra (height > alto del
+   navbar) para el degradado y se apaga en secciones de tema claro (texto ya oscuro). */
 .aa-landing .aa-nav::after {
   content: '';
   position: absolute;
@@ -52,7 +36,7 @@
   pointer-events: none;
 }
 
-.aa-landing .aa-nav.is--scrolled::after {
+.aa-landing .aa-nav[data-aa-nav-theme="light"]::after {
   opacity: 0;
 }
 
@@ -76,15 +60,7 @@
 .aa-landing .aa-nav__logo-img {
   display: block;
   width: auto;
-  height: clamp(1.5rem, 2.6vw, 2.25rem);
-  /* Logo light (blanco): sin filtro en top0 (se lee blanco sobre el hero). Al scrollear la
-     barra se vuelve clara → se oscurece el logo (brightness(0)) para que contraste. */
-  filter: none;
-  transition: filter var(--aa-duration-s) var(--aa-ease);
-}
-
-.aa-landing .aa-nav.is--scrolled .aa-nav__logo-img {
-  filter: brightness(0);
+  height: clamp(2.25rem, 3.6vw, 3.25rem);
 }
 
 /* margin-left:auto ancla los links a la derecha aunque cambie el ancho del logo. */
@@ -96,8 +72,8 @@
 }
 
 .aa-landing .aa-nav__link {
-  /* Blanco en top0 (sobre el hero); al scrollear (is--scrolled) vuelve al fg. */
-  color: #ffffff;
+  /* Color base = tema dark (data-aa-nav-theme, ver ui/section-theme-nav.ts). */
+  color: var(--aa-ink-light);
   font-family: var(--aa-font);
   font-size: var(--aa-text-xs);
   font-weight: var(--aa-weight-semibold);
@@ -109,8 +85,8 @@
   transition: color var(--aa-duration-s) var(--aa-ease);
 }
 
-.aa-landing .aa-nav.is--scrolled .aa-nav__link {
-  color: var(--aa-fg);
+.aa-landing .aa-nav[data-aa-nav-theme="light"] .aa-nav__link {
+  color: var(--aa-ink-dark);
 }
 
 /* Subrayado animado (Osmo "Underline Link"): crece desde la izquierda en hover y se retrae
@@ -160,15 +136,14 @@
   display: block;
   width: 1.25em;
   height: 0.125em;
-  /* Blanco en top0; fg al scrollear. */
-  background-color: #ffffff;
+  background-color: var(--aa-ink-light);
   border-radius: 1px;
   will-change: transform;
   transition: background-color var(--aa-duration-s) var(--aa-ease);
 }
 
-.aa-landing .aa-nav.is--scrolled .aa-nav__burger-line {
-  background-color: var(--aa-fg);
+.aa-landing .aa-nav[data-aa-nav-theme="light"] .aa-nav__burger-line {
+  background-color: var(--aa-ink-dark);
 }
 
 /* ─── Overlay mobile ───────────────────────────────────────────────────────────── */

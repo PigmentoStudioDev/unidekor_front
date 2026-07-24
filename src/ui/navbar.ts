@@ -3,6 +3,8 @@
 //   2. Fuera del top, con gesto de scroll → down oculta / up muestra.
 //   3. En el mount (sin gesto) → oculto si no estás en el top (no forzamos mostrar).
 // classList.toggle(cls, bool) es idempotente: mount y scroll convergen sin pelearse.
+// El tema (color de texto/logo) NO se maneja aquí: lo resuelve initSectionThemeNav
+// (ui/section-theme-nav.ts) leyendo la sección que queda detrás de la barra.
 import { $ } from '../core/dom';
 
 const TOP_THRESHOLD = 0;
@@ -18,15 +20,9 @@ export function initNavbar(root: HTMLElement): void {
     nav.classList.toggle('is--hidden', hidden);
   };
 
-  // Fondo sólido solo fuera del top: transparente en y=0, opaco al scrollear.
-  const setScrolled = (scrolled: boolean): void => {
-    nav.classList.toggle('is--scrolled', scrolled);
-  };
-
   // Regla 1 + 2: el top gana sobre la dirección de scroll.
   const onScroll = (): void => {
     const y = window.scrollY;
-    setScrolled(y > TOP_THRESHOLD);
     if (y <= TOP_THRESHOLD) setHidden(false);
     else if (y > lastY) setHidden(true);
     else if (y < lastY) setHidden(false);
@@ -37,7 +33,6 @@ export function initNavbar(root: HTMLElement): void {
   // Regla 1 + 3: en mount solo se muestra si estás en el top; scrolleado queda oculto.
   const applyMountState = (): void => {
     lastY = window.scrollY;
-    setScrolled(window.scrollY > TOP_THRESHOLD);
     setHidden(window.scrollY > TOP_THRESHOLD);
   };
 

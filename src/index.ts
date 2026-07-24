@@ -9,6 +9,7 @@ import { initRevealGroup } from './ui/reveal-group';
 import { watchLayoutShifts } from './ui/scroll-refresh';
 import { renderNavbar } from './sections/navbar';
 import { initNavbar } from './ui/navbar';
+import { initSectionThemeNav } from './ui/section-theme-nav';
 import { initNavMobile } from './ui/nav-mobile';
 import { renderHero } from './sections/hero';
 import { renderMountIntro } from './sections/loader';
@@ -118,6 +119,7 @@ function boot(): void {
     if (page === 'home') initMountIntro(root);
     initAnchorScroll(root);
     initNavbar(root);
+    initSectionThemeNav(root);
     initNavMobile(root);
     initSplitText(root);
     initRevealGroup(root);
