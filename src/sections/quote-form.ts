@@ -1,8 +1,8 @@
 // Form de cotización reutilizable (home + página de contacto). Devuelve solo los campos +
 // submit; el heading/intro los aporta cada sección. El nombre del campo va como placeholder
 // (sin label visible); aria-label preserva la accesibilidad. El submit hace POST al proxy
-// Edge (repo unidekor-quote-api en Vercel), que valida y envía el email vía Resend. La URL
-// no es secreta: el proxy se defiende con CORS allowlist + honeypot + validación server-side.
+// en Vercel (repo unidekor-quote-api), que valida y envía el email por SMTP. La URL no es
+// secreta: el proxy se defiende con CORS allowlist + honeypot + validación server-side.
 import type { Lang } from '../core/types';
 import { el } from '../core/dom';
 import { button } from '../ui/button';
