@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Instalación · Unidekor</title>
+
+  <style>
+    :root {
+      --ink: #392921;
+      --muted: #6b5a50;
+      --bg: #fcfbfa;
+      --panel: #f6f5f0;
+      --line: #e3ddd4;
+      --accent: #69533f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 3rem 1.5rem 6rem;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    main { max-width: 46rem; margin-inline: auto; }
+
+    h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 0.4rem; letter-spacing: -0.01em; }
+    h2 { font-size: 1.15rem; margin: 2.75rem 0 0.75rem; letter-spacing: -0.005em; }
+    h3 { font-size: 0.95rem; margin: 1.5rem 0 0.5rem; }
+
+    .lead { color: var(--muted); margin: 0 0 2rem; }
+
+    p { margin: 0 0 1rem; }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.875em;
+      background: var(--panel);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+    }
+
+    pre {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 0 0 1rem;
+    }
+
+    pre code { background: none; padding: 0; font-size: 0.8125rem; line-height: 1.55; }
+
+    table { border-collapse: collapse; width: 100%; margin: 0 0 1rem; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--line); }
+    th { font-weight: 600; }
+    td code { font-size: 0.8125rem; }
+
+    .note {
+      border-left: 3px solid var(--accent);
+      background: var(--panel);
+      padding: 0.85rem 1rem;
+      margin: 0 0 1rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .note p:last-child { margin-bottom: 0; }
+    .note strong { display: block; margin-bottom: 0.25rem; }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink: #f2ede8;
+        --muted: #a89a8e;
+        --bg: #241b17;
+        --panel: #2f2520;
+        --line: #43352c;
+        --accent: #bbad89;
+      }
+    }
+  </style>
+</head>
+<body>
+<main>
+
+  <h1>Instalación del sitio Unidekor</h1>
+  <p class="lead">
+    Cómo montar la landing dentro de Elementor. El host solo aporta un punto de montaje:
+    todo el HTML, los estilos y la lógica los inyecta el bundle.
+  </p>
+
+  <h2>Cómo funciona</h2>
+  <p>
+    Cada página del sitio es un <code>&lt;div&gt;</code> vacío más un <code>&lt;script&gt;</code>.
+    El script se localiza a sí mismo, carga el CSS y el JS con hash, lee los atributos del div y
+    renderiza la página que corresponda dentro de él.
+  </p>
+  <p>
+    Esto significa que <strong>no hay nada que actualizar en Elementor</strong> cuando el sitio
+    cambia. Se pega una sola vez y los despliegues posteriores llegan solos.
+  </p>
+
+  <h2>Los snippets</h2>
+  <p>
+    En Elementor, crea una página por cada bloque y agrégale un widget <em>HTML</em>. Copia el
+    snippet completo que corresponda. Lo único que cambia entre ellos es
+    <code>data-aa-page</code>.
+  </p>
+
+  <h3>Inicio</h3>
+<pre><code>&lt;div data-aa-mount data-aa-page="home" data-aa-theme="light" data-aa-lang="es"&gt;&lt;/div&gt;
+&lt;script src="https://unidekor.vercel.app/loader.js" data-cfasync="false"&gt;&lt;/script&gt;</code></pre>
+
+  <h3>¿Quiénes somos?</h3>
+<pre><code>&lt;div data-aa-mount data-aa-page="nosotros" data-aa-theme="light" data-aa-lang="es"&gt;&lt;/div&gt;
+&lt;script src="https://unidekor.vercel.app/loader.js" data-cfasync="false"&gt;&lt;/script&gt;</code></pre>
+
+  <h3>Contacto</h3>
+<pre><code>&lt;div data-aa-mount data-aa-page="contacto" data-aa-theme="light" data-aa-lang="es"&gt;&lt;/div&gt;
+&lt;script src="https://unidekor.vercel.app/loader.js" data-cfasync="false"&gt;&lt;/script&gt;</code></pre>
+
+  <div class="note">
+    <strong>Los tres llevan el mismo script</strong>
+    <p>
+      No es un error de copiado: la línea del <code>&lt;script&gt;</code> es idéntica en las tres.
+      Lo que decide qué se renderiza es el <code>div</code>, no el script.
+    </p>
+  </div>
+
+  <div class="note">
+    <strong>Un solo montaje por página</strong>
+    <p>
+      El script se protege contra cargas duplicadas, así que si Elementor lo inserta dos veces
+      no pasa nada. Pero dos <code>div</code> de montaje en la misma página renderizarían el
+      sitio dos veces.
+    </p>
+  </div>
+
+  <h2>Atributos disponibles</h2>
+  <table>
+    <thead>
+      <tr><th>Atributo</th><th>Valores</th><th>Por defecto</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>data-aa-mount</code></td><td>requerido, sin valor</td><td>&mdash;</td></tr>
+      <tr><td><code>data-aa-page</code></td><td><code>home</code>, <code>nosotros</code>, <code>contacto</code></td><td><code>home</code></td></tr>
+      <tr><td><code>data-aa-theme</code></td><td><code>light</code>, <code>dark</code></td><td><code>light</code></td></tr>
+      <tr><td><code>data-aa-lang</code></td><td><code>es</code>, <code>en</code></td><td><code>es</code></td></tr>
+    </tbody>
+  </table>
+  <p>
+    Un valor no reconocido en <code>data-aa-page</code> cae a <code>home</code>, nunca a una
+    página en blanco.
+  </p>
+
+  <h2>Notas de implementación</h2>
+
+  <div class="note">
+    <strong>No quites data-cfasync="false"</strong>
+    <p>
+      Le indica a Rocket Loader de Cloudflare que no difiera ni reordene el script. Sin ese
+      atributo, el montaje puede ejecutarse antes de tiempo y quedar en blanco.
+    </p>
+  </div>
+
+  <div class="note">
+    <strong>Actualizaciones automáticas</strong>
+    <p>
+      <code>loader.js</code> se cachea 5 minutos; los bundles con hash, un año como inmutables.
+      Un despliegue nuevo genera hashes nuevos y el loader los apunta solo. No hay que purgar
+      caché ni tocar el host.
+    </p>
+  </div>
+
+  <div class="note">
+    <strong>Formulario de cotización</strong>
+    <p>
+      El envío pasa por un proxy propio. El dominio donde montes el sitio tiene que estar en la
+      lista de orígenes permitidos de ese proxy; si no, el formulario responde 403. Al publicar
+      en un dominio nuevo, hay que agregarlo.
+    </p>
+  </div>
+
+  <h2>Verificar que quedó bien</h2>
+  <p>
+    Abre la página publicada y confirma tres cosas: que se ve el sitio completo, que la consola
+    del navegador no muestra errores, y que el formulario de contacto responde al enviarlo.
+  </p>
+
+  <footer>
+    Documentación interna &middot; Unidekor
+  </footer>
+
+</main>
+</body>
+</html>
