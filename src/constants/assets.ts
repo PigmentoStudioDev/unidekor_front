@@ -10,7 +10,12 @@ const asset = (key: string): string => `${R2_BASE}/${encodeURIComponent(key)}`;
 export const LOGOS = {
   main: asset('unidekor-logo.webp'),
   // Wordmark blanco (para fondos oscuros: hero/footer y navbar en top0).
-  light: asset('unidekorlightlogo__3f9ab8a4f83cc1c0d04ee3f14f652ed10ff93e684064543d4921d537469e75e1.webp'),
+  light: asset('unidekor-logo.webp'),
+} as const;
+
+// ─── Documentos ─────────────────────────────────────────────────────────────────
+export const DOCS = {
+  presentation: asset('PRESENTACION UNIDEKOR 2026 (1).pdf'),
 } as const;
 
 // ─── Imágenes (galería / editorial) ────────────────────────────────────────────
