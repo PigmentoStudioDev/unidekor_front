@@ -1,6 +1,7 @@
 import * as esbuild from 'esbuild';
 import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { basename } from 'node:path';
+import { basename, dirname } from 'node:path';
+import { createPrerenderer } from './prerender.mjs';
 
 const dev = process.argv.includes('--watch') || process.argv.includes('--serve');
 
@@ -54,11 +55,31 @@ function writeLoader(js, css) {
   writeFileSync('dist/loader.js', src);
 }
 
-// Copia la página de preview al deploy (dist/), sirviendo de demo hosteada y, en dev, de
-// página que abre el server (servedir: dist). Carga el loader mismo-origen (./loader.js).
-function copyPreview() {
-  mkdirSync('dist', { recursive: true });
-  writeFileSync('dist/index.html', readFileSync('index.html', 'utf8'));
+// Páginas estáticas que van al deploy respetando su ruta. `page` indica qué página del
+// bundle hornear dentro de su div de montaje (ver prerender.mjs); sin `page` se copia tal
+// cual, como la documentación, que no monta el bundle.
+// Con cleanUrls de Vercel (vercel.json), how-to-install.html queda en /docs/how-to-install.
+// `src` es la ruta en el repo y `dest` la del deploy: las páginas viven bajo preview/ pero se
+// sirven desde la raíz de dist. Con cleanUrls (vercel.json), nosotros.html queda en /nosotros.
+const STATIC_PAGES = [
+  { src: 'preview/index.html', dest: 'index.html', page: 'home' },
+  { src: 'preview/nosotros.html', dest: 'nosotros.html', page: 'nosotros' },
+  { src: 'preview/contacto.html', dest: 'contacto.html', page: 'contacto' },
+  { src: 'docs/how-to-install.html', dest: 'docs/how-to-install.html' },
+];
+
+async function copyStaticPages() {
+  const { prerender, robots, sitemap } = await createPrerenderer();
+
+  for (const { src, dest, page } of STATIC_PAGES) {
+    const out = `dist/${dest}`;
+    mkdirSync(dirname(out), { recursive: true });
+    const html = readFileSync(src, 'utf8');
+    writeFileSync(out, page ? prerender(html, { page, lang: 'es', theme: 'light' }) : html);
+  }
+
+  writeFileSync('dist/robots.txt', robots);
+  writeFileSync('dist/sitemap.xml', sitemap);
 }
 
 // Con metafile, toma los nombres hasheados de los ENTRY outputs (ignora .map y chunks, que
@@ -77,7 +98,7 @@ if (dev) {
   const ctx = await esbuild.context(options);
   await ctx.watch();
   writeLoader('landing.js', 'styles.css');
-  copyPreview();
+  await copyStaticPages();
   if (process.argv.includes('--serve')) {
     const { host, port } = await ctx.serve({ servedir: 'dist', port: Number(process.env.PORT) || 8770 });
     console.log(`dev server: http://${host}:${port}/`);
@@ -88,5 +109,5 @@ if (dev) {
   const { metafile } = await esbuild.build(options);
   const { js, css } = hashedNames(metafile);
   writeLoader(js, css);
-  copyPreview();
+  await copyStaticPages();
 }

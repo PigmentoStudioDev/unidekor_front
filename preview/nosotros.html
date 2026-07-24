@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- title, description, canonical y Open Graph los hornea el prerender desde
+       src/constants/seo.ts. Este title es solo el fallback si se abre sin build. -->
   <title>Unidekor</title>
 
   <style>
@@ -16,7 +18,7 @@
 </head>
 <body>
 
-  <div data-aa-mount data-aa-theme="light" data-aa-lang="es"></div>
+  <div data-aa-mount data-aa-page="nosotros" data-aa-theme="light" data-aa-lang="es"></div>
 
   <script src="./loader.js" data-cfasync="false"></script>
 </body>

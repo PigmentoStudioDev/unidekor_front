@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- title, description, canonical y Open Graph los hornea el prerender desde
+       src/constants/seo.ts. Este title es solo el fallback si se abre sin build. -->
+  <title>Unidekor</title>
+
+  <style>
+    /* El DS usa --aa-font propio; el host real puede imponer otra fuente. Aquí simulamos un
+       host neutro con una sans moderna. Idioma conmutable con ?lang=en. */
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <div data-aa-mount data-aa-page="contacto" data-aa-theme="light" data-aa-lang="es"></div>
+
+  <script src="./loader.js" data-cfasync="false"></script>
+</body>
+</html>

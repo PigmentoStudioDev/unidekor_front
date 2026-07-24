@@ -3,24 +3,15 @@
 //   <script data-cfasync="false" src="https://<proyecto>.vercel.app/loader.js"></script>
 
 import { type Theme, type Lang, type Page, PAGES } from './core/types';
+import { renderPage } from './render';
 import { initMotion } from './ui/motion';
 import { initSplitText } from './ui/split-text';
 import { initRevealGroup } from './ui/reveal-group';
 import { watchLayoutShifts } from './ui/scroll-refresh';
-import { renderNavbar } from './sections/navbar';
 import { initNavbar } from './ui/navbar';
 import { initSectionThemeNav } from './ui/section-theme-nav';
 import { initNavMobile } from './ui/nav-mobile';
-import { renderHero } from './sections/hero';
-import { renderMountIntro } from './sections/loader';
 import { initMountIntro } from './ui/loader';
-import { renderProducts } from './sections/products';
-import { renderQuote } from './sections/quote';
-import { renderFaq } from './sections/faq';
-import { renderContact } from './sections/contact';
-import { renderQuienesHeader, renderQuienesIntro, renderEspacios } from './sections/nosotros';
-import { renderContacto } from './sections/contacto';
-import { renderFooter } from './sections/footer';
 import { initAccordion } from './ui/accordion';
 
 // Scroll suave para anclas internas (#id) sin tocar CSS global del host.
@@ -69,31 +60,6 @@ function shouldPlayMountIntro(): boolean {
   }
 }
 
-// Home: intro de mount (solo primer mount) + hero + productos + cotiza + FAQ + contacto.
-function renderHome(root: HTMLElement, lang: Lang): void {
-  renderMountIntro(root, shouldPlayMountIntro());
-  renderHero(root, lang);
-  renderProducts(root, lang);
-  renderQuote(root, lang);
-  renderFaq(root, lang);
-  renderContact(root, lang);
-}
-
-// Nosotros ("¿Quiénes somos?"): header + intro + espacios.
-function renderNosotros(root: HTMLElement, lang: Lang): void {
-  renderQuienesHeader(root, lang);
-  renderQuienesIntro(root, lang);
-  renderEspacios(root, lang);
-}
-
-// Registro página → render. Agregar una página es una entrada más; TypeScript exige cubrir
-// todas las claves de Page (exhaustividad).
-const PAGE_RENDERERS: Record<Page, (root: HTMLElement, lang: Lang) => void> = {
-  home: renderHome,
-  nosotros: renderNosotros,
-  contacto: renderContacto,
-};
-
 function boot(): void {
   const mounts = document.querySelectorAll<HTMLElement>('[data-aa-mount]');
   mounts.forEach((mount) => {
@@ -101,16 +67,9 @@ function boot(): void {
     const lang = resolveLang(mount.dataset.aaLang);
     const page = resolvePage(mount.dataset.aaPage);
 
-    // Root wrapper — todo el CSS está scopeado a .aa-landing
-    const root = document.createElement('div');
-    root.className = 'aa-landing';
-    root.setAttribute('data-aa-theme', theme);
-    root.setAttribute('data-aa-lang', lang);
-
-    // Fase de render: navbar y footer comunes; en medio, la página resuelta por el registro.
-    renderNavbar(root, lang, page);
-    PAGE_RENDERERS[page](root, lang);
-    renderFooter(root, lang);
+    // Fase de render (src/render.ts): el mismo módulo que usa el prerender, así el DOM del
+    // cliente y el del HTML estático no pueden divergir. La intro de mount solo aquí.
+    const root = renderPage(page, lang, theme, page === 'home' && shouldPlayMountIntro());
 
     mount.replaceChildren(root);
 
