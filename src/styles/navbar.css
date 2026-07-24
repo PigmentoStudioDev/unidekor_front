@@ -155,6 +155,28 @@
   background-color: var(--aa-ink-dark);
 }
 
+/* ─── Barra con el menú móvil abierto ──────────────────────────────────────────────
+   Con el overlay desplegado la barra deja de flotar sobre el contenido: se vuelve una
+   superficie sólida continua con el menú. El estado se lee del aria-expanded del burger
+   vía :has(), así no hace falta una clase extra en JS.
+
+   background-image y no background-color porque el overdraw del section-theme fuerza
+   background-color: transparent cuando el tema de la sección coincide con el del root
+   (ver section-theme.css). */
+.aa-landing .aa-nav:has(.aa-nav__burger[aria-expanded="true"]) {
+  background-image: linear-gradient(var(--aa-bg), var(--aa-bg));
+}
+
+/* Sobre esa superficie clara la viñeta sobra y el burger va oscuro, sin importar el tema de
+   la sección que quedó detrás. */
+.aa-landing .aa-nav:has(.aa-nav__burger[aria-expanded="true"])::after {
+  opacity: 0;
+}
+
+.aa-landing .aa-nav:has(.aa-nav__burger[aria-expanded="true"]) .aa-nav__burger-line {
+  background-color: var(--aa-ink-dark);
+}
+
 /* ─── Overlay mobile ───────────────────────────────────────────────────────────── */
 .aa-landing .aa-nav__mobile {
   display: none; /* desktop: nunca */
