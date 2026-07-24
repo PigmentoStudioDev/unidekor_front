@@ -89,6 +89,15 @@
   color: var(--aa-ink-dark);
 }
 
+/* Excepción de contacto: su grid deja la columna de foto justo bajo los navlinks, mientras
+   el logo queda sobre la columna clara del formulario. La sección es clara, así que el tema
+   general debe seguir siendo light (logo legible) y solo los links se fuerzan a claro.
+   El doble atributo sube la especificidad a 0,5,0 para ganarle a la regla de tema (0,4,0)
+   sin depender del orden, que esbuild reordena al minificar. */
+.aa-landing .aa-nav[data-aa-nav-page="contacto"][data-aa-nav-theme] .aa-nav__link {
+  color: var(--aa-ink-light);
+}
+
 /* Subrayado animado (Osmo "Underline Link"): crece desde la izquierda en hover y se retrae
    hacia la derecha al salir. currentColor = fg del link. 100% CSS. */
 .aa-landing [data-underline-link] {

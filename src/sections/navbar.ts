@@ -9,7 +9,12 @@ import { LOGOS } from '../constants/assets';
 export function renderNavbar(root: HTMLElement, lang: Lang, page: string): void {
   // data-aa-nav-theme arranca en 'dark' (coincide con el hero, que es lo primero que hay
   // detrás de la barra al montar) — initSectionThemeNav lo corrige en el primer chequeo.
-  const nav = el('nav', 'aa-nav', { 'data-aa-section-theme': 'light', 'data-aa-nav-theme': 'dark' });
+  // data-aa-nav-page permite excepciones por página en CSS (ver navbar.css).
+  const nav = el('nav', 'aa-nav', {
+    'data-aa-section-theme': 'light',
+    'data-aa-nav-theme': 'dark',
+    'data-aa-nav-page': page,
+  });
 
   // El logo lleva al home del sitio (raíz). En prod se mapea a la home real del host.
   const logo = el('a', 'aa-nav__logo', { href: '/', 'aria-label': 'Unidekor · Inicio' });
