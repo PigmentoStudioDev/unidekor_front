@@ -24,9 +24,16 @@ export const NAV: Record<Lang, NavLink[]> = {
   ],
 };
 
-// En dev/preview pagePath usa ?page=; en prod se mapea a los slugs reales del host.
+// Slugs temporales del host (WordPress) mientras el sitio está en aprobación de diseño sobre
+// prod. Cuando se aprueben, este mapa se reemplaza por las URLs productivas finales.
+const PAGE_URLS: Record<string, string> = {
+  home: 'https://unidekor.com.mx/nuevo-home/',
+  nosotros: 'https://unidekor.com.mx/nuevo-sitio-quienes-somos/',
+  contacto: 'https://unidekor.com.mx/nuevo-sitio-contacto/',
+};
+
 function pagePath(page: string): string {
-  return `?page=${page}`;
+  return PAGE_URLS[page] ?? `?page=${page}`;
 }
 
 export function navHref(link: { page: string; anchor: string }, currentPage: string): string {
@@ -375,12 +382,12 @@ export const FOOTER: Record<Lang, FooterCopy> = {
     menuTitle: 'MENÚ',
     contactTitle: 'CONTACTO',
     menu: [
-      { label: 'Inicio', href: '?page=home#inicio' },
-      { label: 'Productos', href: '?page=home#productos' },
+      { label: 'Inicio', href: `${pagePath('home')}#inicio` },
+      { label: 'Productos', href: `${pagePath('home')}#productos` },
       { label: 'Galerías', href: '#' },
-      { label: 'FAQs', href: '?page=home#faq' },
-      { label: 'Nosotros', href: '?page=nosotros#quienes' },
-      { label: 'Contacto', href: '?page=contacto#contacto' },
+      { label: 'FAQs', href: `${pagePath('home')}#faq` },
+      { label: 'Nosotros', href: `${pagePath('nosotros')}#quienes` },
+      { label: 'Contacto', href: `${pagePath('contacto')}#contacto` },
     ],
     social: [
       { label: 'Facebook', href: SOCIAL.facebook },
@@ -396,12 +403,12 @@ export const FOOTER: Record<Lang, FooterCopy> = {
     menuTitle: 'MENU',
     contactTitle: 'CONTACT',
     menu: [
-      { label: 'Home', href: '?page=home#inicio' },
-      { label: 'Products', href: '?page=home#productos' },
+      { label: 'Home', href: `${pagePath('home')}#inicio` },
+      { label: 'Products', href: `${pagePath('home')}#productos` },
       { label: 'Gallery', href: '#' },
-      { label: 'FAQs', href: '?page=home#faq' },
-      { label: 'About', href: '?page=nosotros#quienes' },
-      { label: 'Contact', href: '?page=contacto#contacto' },
+      { label: 'FAQs', href: `${pagePath('home')}#faq` },
+      { label: 'About', href: `${pagePath('nosotros')}#quienes` },
+      { label: 'Contact', href: `${pagePath('contacto')}#contacto` },
     ],
     social: [
       { label: 'Facebook', href: SOCIAL.facebook },
