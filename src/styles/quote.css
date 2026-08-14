@@ -6,19 +6,16 @@
 
 .aa-landing .aa-quote {
   position: relative;
-  overflow: clip; /* recorta la capa de fondo rotada/escalada */
+  overflow: clip;
 }
 
-/* Fondo de la strip: <img> rotada 90° a la derecha. scale compensa el rotate para que la
-   imagen siga cubriendo la caja (el rotate deja huecos en los costados). z-index 0 → bajo
-   el contenido. */
+/* Fondo de la strip: <img> full-bleed. z-index 0 → bajo el contenido. */
 .aa-landing .aa-quote__bg {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  transform: translate(-50%, -50%) rotate(90deg) scale(2.2);
   object-fit: cover;
   z-index: 0;
   pointer-events: none;

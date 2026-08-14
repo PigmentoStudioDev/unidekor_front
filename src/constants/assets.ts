@@ -35,7 +35,7 @@ export const IMAGES = {
   heroD: asset('asdasfsafdsa_a8be20a0ef2fefc947dbd4b9bd1be35a72d27f670d5966392bf4699d7a06d632.webp'),
   // Sección de cotización: imagen 1:1 del slot (media) + fondo de la strip.
   contactSquare: asset('014dd66437318efefd2f5093651a8095_411e0dae564c9c2bcbc16313b873c0a2a2527c74fc24cc1ec28c3209e0c115cf.webp'),
-  contactBg: asset('4b46ac11b40d1eb000f3b783968e5f6e (1)_66bd4f8994c0594748120b2c47ce3328e44b86b2b6fee5100fb53f00e796fc0b.webp'),
+  contactBg: asset('pexels-hakimsatoso-5776224.webp'),
   // Página "¿Quiénes somos?": fondo del header, imagen de historia (rotada) y 4 espacios.
   quienesHero: asset('sdadsa.webp'),
   historia: asset('f218f6fa3d0a9f70aa70a569c3fd0178_c68abc9ce467a92bc8dcfc2a1e53b4669f86d08eb9d785d3b3f9c1cd77b138df.webp'),
