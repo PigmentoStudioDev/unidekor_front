@@ -1,7 +1,7 @@
 import * as esbuild from 'esbuild';
 import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, dirname } from 'node:path';
-import { createPrerenderer } from './prerender.mjs';
+import { createPrerenderer, GOOGLE_ADS_ID } from './prerender.mjs';
 
 const dev = process.argv.includes('--watch') || process.argv.includes('--serve');
 
@@ -39,6 +39,18 @@ function writeLoader(js, css) {
   const src = `(function () {
   if (window.__aaUnidekor) return;
   window.__aaUnidekor = true;
+
+  if (!document.querySelector('script[src*="gtag/js?id=${GOOGLE_ADS_ID}"]')) {
+    var g = document.createElement('script');
+    g.async = true;
+    g.setAttribute('data-cfasync', 'false');
+    g.src = 'https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}';
+    document.head.appendChild(g);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', '${GOOGLE_ADS_ID}');
+  }
 
   var self = document.currentScript || document.querySelector('script[src*="loader.js"]');
   var base = self ? self.src.replace(/\\/loader\\.js.*$/, '') : '';

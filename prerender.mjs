@@ -176,6 +176,30 @@ function injectSchema(document, schema) {
   document.head.appendChild(tag);
 }
 
+// Google Ads base tag. El ID es el mismo en prerender y en el loader: las páginas de
+// Vercel lo reciben en el <head> horneado; Elementor no pasa por este archivo, así que
+// el loader lo inyecta si aún no está. Idempotente para no duplicar si el HTML ya lo trae.
+export const GOOGLE_ADS_ID = 'AW-18275758869';
+
+function injectGtag(document, adsId) {
+  if (document.head.querySelector(`script[src*="gtag/js?id=${adsId}"]`)) return;
+
+  const src = document.createElement('script');
+  src.setAttribute('async', '');
+  src.setAttribute('data-cfasync', 'false');
+  src.src = `https://www.googletagmanager.com/gtag/js?id=${adsId}`;
+
+  const boot = document.createElement('script');
+  boot.setAttribute('data-cfasync', 'false');
+  boot.textContent =
+    `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${adsId}');`;
+
+  const viewport = document.head.querySelector('meta[name="viewport"]');
+  const anchor = viewport ? viewport.nextSibling : document.head.firstChild;
+  document.head.insertBefore(src, anchor);
+  document.head.insertBefore(boot, src.nextSibling);
+}
+
 export async function createPrerenderer() {
   const { renderPage, SEO, SITE_ORIGIN, BUSINESS, FAQ } = await loadRenderer();
 
@@ -197,6 +221,7 @@ export async function createPrerenderer() {
     globalThis.document = document;
 
     mount.innerHTML = renderPage(page, lang, theme).outerHTML;
+    injectGtag(document, GOOGLE_ADS_ID);
     injectHead(document, SEO[page], SITE_ORIGIN);
     injectSchema(document, buildSchema(page, SEO[page], SITE_ORIGIN, BUSINESS, FAQ[lang]));
     return document.toString();
