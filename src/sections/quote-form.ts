@@ -11,6 +11,16 @@ import { QUOTE } from '../constants/content';
 // URL absoluta del proxy en Vercel. Reemplazar tras el primer deploy de unidekor-quote-api.
 const QUOTE_ENDPOINT = 'https://unidekor-quote-api.vercel.app/api/quote';
 
+// Conversión "Envio Form Unidekor". Se dispara en el submit OK (no hay thank-you page
+// donde pegar el snippet estático de Google Ads).
+const ADS_CONVERSION = 'AW-18275758869/YnrFCJLfuOMcEJXmx4pE';
+
+function trackQuoteConversion(): void {
+  const gtag = (window as Window & { gtag?: (...args: unknown[]) => void }).gtag;
+  if (typeof gtag !== 'function') return;
+  gtag('event', 'conversion', { send_to: ADS_CONVERSION });
+}
+
 const STATUS: Record<Lang, { sending: string; ok: string; error: string }> = {
   es: {
     sending: 'Enviando…',
@@ -59,6 +69,8 @@ export function renderQuoteForm(lang: Lang): HTMLFormElement {
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error('request_failed');
+      const honeypotValue = typeof data.website === 'string' ? data.website.trim() : '';
+      if (!honeypotValue) trackQuoteConversion();
       form.reset();
       status.className = 'aa-quote__status aa-quote__status--ok';
       status.textContent = msg.ok;

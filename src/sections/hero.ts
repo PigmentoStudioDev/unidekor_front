@@ -39,7 +39,7 @@ export function renderHero(root: HTMLElement, lang: Lang): void {
   // Wrapper row de CTAs (primario + secundario) debajo del heading. Sin entrance de
   // scroll: el reveal del hero lo hace el wipe por celda de la mount intro (ui/loader.ts).
   const ctas = el('div', 'aa-hero__ctas');
-  const ctaPrimary = button('aa-btn', t.ctaPrimary, { href: '#inicio' });
+  const ctaPrimary = button('aa-btn', t.ctaPrimary, { href: '#contacto' });
   const ctaSecondary = button('aa-btn aa-btn--ghost', t.ctaSecondary, {
     href: DOCS.presentation,
     download: '',
