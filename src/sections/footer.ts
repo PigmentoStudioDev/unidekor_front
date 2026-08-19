@@ -34,7 +34,7 @@ export function renderFooter(root: HTMLElement, lang: Lang, copy?: FooterCopy): 
   const nav = el('div', 'aa-footer__nav');
   nav.append(
     renderLinkColumn(t.menuTitle, t.menu),
-    renderLinkColumn(t.contactTitle, [...t.social, ...t.legal]),
+    renderLinkColumn(t.contactTitle, t.social),
   );
 
   inner.append(logo, nav);

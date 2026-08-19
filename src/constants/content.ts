@@ -371,11 +371,9 @@ export interface FooterCopy {
   contactTitle: string;
   menu: FooterLink[];
   social: FooterLink[];
-  legal: FooterLink[];
 }
 
-// Redes sociales y links legales van a "#" hasta tener las cuentas/páginas reales.
-// "Galerías" y "Nosotros" aún no tienen sección propia: quedan en "#" por ahora.
+// YouTube queda en "#" hasta tener la URL exacta. "Galerías" aún no tiene sección propia.
 export const FOOTER: Record<Lang, FooterCopy> = {
   es: {
     menuTitle: 'MENÚ',
@@ -393,10 +391,6 @@ export const FOOTER: Record<Lang, FooterCopy> = {
       { label: 'Instagram', href: SOCIAL.instagram },
       { label: 'YouTube', href: SOCIAL.youtube },
     ],
-    legal: [
-      { label: 'Términos y Condiciones', href: '#' },
-      { label: 'Aviso de privacidad', href: '#' },
-    ],
   },
   en: {
     menuTitle: 'MENU',
@@ -413,10 +407,6 @@ export const FOOTER: Record<Lang, FooterCopy> = {
       { label: 'Facebook', href: SOCIAL.facebook },
       { label: 'Instagram', href: SOCIAL.instagram },
       { label: 'YouTube', href: SOCIAL.youtube },
-    ],
-    legal: [
-      { label: 'Terms & Conditions', href: '#' },
-      { label: 'Privacy Notice', href: '#' },
     ],
   },
 };
