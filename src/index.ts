@@ -34,7 +34,7 @@ function initAnchorScroll(root: HTMLElement): void {
 }
 
 // El mount reemplaza el DOM después del hash nativo del navegador: sin esto, llegar
-// a /nuevo-home/#contacto (u otra ancla) deja la página arriba.
+// a /#contacto (u otra ancla) deja la página arriba.
 function scrollToLocationHash(root: HTMLElement): void {
   scrollToId(root, window.location.hash.slice(1));
 }

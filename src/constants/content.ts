@@ -4,7 +4,7 @@
 import type { Lang } from '../core/types';
 
 // Navbar global (sin CTA). Cada link declara `page` + `anchor`. navHref() resuelve el href
-// según la página actual: misma página → ancla interna; otra página → ?page=X#anchor.
+// según la página actual: misma página → ancla interna; otra página → permalink del host + ancla.
 export interface NavLink {
   label: string;
   page: string;
@@ -24,12 +24,11 @@ export const NAV: Record<Lang, NavLink[]> = {
   ],
 };
 
-// Slugs temporales del host (WordPress) mientras el sitio está en aprobación de diseño sobre
-// prod. Cuando se aprueben, este mapa se reemplaza por las URLs productivas finales.
+// Permalinks productivos del host (WordPress). Navbar y footer los usan para saltar de página.
 const PAGE_URLS: Record<string, string> = {
-  home: 'https://unidekor.com.mx/nuevo-home/',
-  nosotros: 'https://unidekor.com.mx/nuevo-sitio-quienes-somos/',
-  contacto: 'https://unidekor.com.mx/nuevo-sitio-contacto/',
+  home: 'https://unidekor.com.mx/',
+  nosotros: 'https://unidekor.com.mx/nosotros/',
+  contacto: 'https://unidekor.com.mx/contacto/',
 };
 
 function pagePath(page: string): string {
