@@ -64,8 +64,8 @@ export const NOSOTROS_PAGE: Record<Lang, NosotrosPageCopy> = {
   en: NOSOTROS_PAGE_ES,
 };
 
-// Página de contacto (contacto.ts): layout de 3 columnas. `channels` = WhatsApp + redes
-// (redes en '#' hasta tener las cuentas). El mapa reusa CONTACT[lang].mapEmbedSrc.
+// Página de contacto (contacto.ts): layout de 3 columnas. `channels` = WhatsApp + redes.
+// El mapa reusa CONTACT[lang].mapEmbedSrc.
 export interface ContactoPageCopy {
   heading: string;
   intro: string;
@@ -74,13 +74,10 @@ export interface ContactoPageCopy {
   address: string;
 }
 
-// Redes oficiales de Unidekor. Instagram exacta (handle @unidekor_lvt). Facebook (página
-// "Unidekor Mexico") y YouTube: VERIFICAR la URL exacta — placeholder por ahora.
 const SOCIAL = {
-  whatsapp: 'https://wa.me/525553580302',
-  facebook: 'https://www.facebook.com/UnidekorMexico',
-  instagram: 'https://www.instagram.com/unidekor_lvt/',
-  youtube: '#',
+  whatsapp: 'https://wa.me/525536385039',
+  facebook: 'https://www.facebook.com/people/Unidekor/61591565484476/',
+  instagram: 'https://www.instagram.com/unidekor_mx',
 } as const;
 
 const CONTACTO_PAGE_ES: ContactoPageCopy = {
@@ -91,7 +88,6 @@ const CONTACTO_PAGE_ES: ContactoPageCopy = {
     { label: 'WhatsApp', href: SOCIAL.whatsapp },
     { label: 'Facebook', href: SOCIAL.facebook },
     { label: 'Instagram', href: SOCIAL.instagram },
-    { label: 'YouTube', href: SOCIAL.youtube },
   ],
   addressLabel: 'Nombre:',
   address:
@@ -373,7 +369,7 @@ export interface FooterCopy {
   social: FooterLink[];
 }
 
-// YouTube queda en "#" hasta tener la URL exacta. "Galerías" aún no tiene sección propia.
+// "Galerías" aún no tiene sección propia.
 export const FOOTER: Record<Lang, FooterCopy> = {
   es: {
     menuTitle: 'MENÚ',
@@ -389,7 +385,6 @@ export const FOOTER: Record<Lang, FooterCopy> = {
     social: [
       { label: 'Facebook', href: SOCIAL.facebook },
       { label: 'Instagram', href: SOCIAL.instagram },
-      { label: 'YouTube', href: SOCIAL.youtube },
     ],
   },
   en: {
@@ -406,7 +401,6 @@ export const FOOTER: Record<Lang, FooterCopy> = {
     social: [
       { label: 'Facebook', href: SOCIAL.facebook },
       { label: 'Instagram', href: SOCIAL.instagram },
-      { label: 'YouTube', href: SOCIAL.youtube },
     ],
   },
 };
